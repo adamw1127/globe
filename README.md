@@ -1,1 +1,119 @@
-# globe
+# Economic Globe
+
+An interactive 3D globe of economic, financial and social data from 1600 to today. Click a territory, pick a year, and the side panel shows every metric that has a real recorded value for that place and year, each with a trend chart. Borders change with the year.
+
+React + Vite, Globe.gl (three.js), Recharts and Tailwind. All data is static JSON in `public/`. The app makes no API calls at runtime.
+
+```bash
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # static site in dist/
+```
+
+Views are shareable through the URL hash, for example `#year=1914&color=exports_usd&sel=GBR`.
+
+## How it fits together
+
+| Path | What it is |
+| --- | --- |
+| `public/config/metrics.json` | **Metrics registry.** The UI renders entirely from it. |
+| `public/config/categories.json` | Side-panel sections: add, rename or reorder them here. |
+| `public/config/eras.json` | Era labels on the slider and the era-based coverage notes. |
+| `public/data/metrics/<id>.json` | One file per metric: `{ entityCode: { year: value } }`. |
+| `public/data/entities.json` | Maps map territories to data entities (see below). |
+| `public/data/borders/` | Simplified border snapshots plus `index.json`. |
+| `public/data/trade/<CODE>/<year>.json` | Top exports, imports and partners for one territory-year. |
+| `public/data/timeline.json` | Slider stops, computed from the data. |
+| `src/data/borders.js` | Border loader. The only code that knows where borders come from. |
+
+### Adding a metric
+
+1. Add an entry to `public/config/metrics.json`:
+
+   ```json
+   {
+     "id": "my_metric",
+     "name": "My metric",
+     "category": "economy",
+     "priority": 7,
+     "source": "Where it comes from",
+     "unit": "% of GDP",
+     "format": "percent",
+     "firstYear": null,
+     "description": "Shown when hovering the metric name.",
+     "loader": { "type": "worldbank", "indicator": "XX.YYY.ZZZ" }
+   }
+   ```
+
+2. Put the data at `public/data/metrics/my_metric.json` as `{ "FRA": { "1990": 1.5 } }`. For a World Bank indicator, `npm run data:worldbank my_metric` does it. For an Our World in Data chart, use `"loader": { "type": "owid", "slug": "...", "column": "..." }` and `npm run data:owid`.
+3. Run `npm run data:coverage` to set `firstYear` and `lastYear` from the data and recompute the slider stops.
+
+No UI code changes are needed. The metric shows up in its category (sorted by `priority`, lower first) and in the "Color by" menu.
+
+Formats: `usd`, `usd_compact`, `percent`, `compact`, `integer`, `decimal1`, `decimal2`, `label` (text shown as a tag) and `events` (a list of names, such as wars). Labels and events get tags instead of a trend chart and are left out of the choropleth. A metric can also list `extend` loaders that only fill years its main source lacks (population uses the World Bank from 1960 and long-run estimates before that).
+
+### Display rules
+
+- A metric appears only when it has a value for that exact territory and year. A section with no such metrics is hidden.
+- The coverage note adapts to the era (`coverageNotes` in `eras.json`) and names the metrics when only a few exist.
+- Gray on the map means no data for the selected metric and year.
+
+## Borders and historical entities
+
+Borders come from [historical-basemaps](https://github.com/aourednik/historical-basemaps) by A. Ourednik (GPL-3.0). `npm run data:borders` simplifies each snapshot from 1600 on, fixes ring winding for Globe.gl and tags every territory with:
+
+- `ENTITY`: the data entity code (an ISO3 code, a historical key, `PART:<ISO3>`, or null)
+- `RULER`: the ruling power when the territory is subject to another (used for "Colonial status")
+
+The app shows the snapshot closest to the selected year and tells the user which one.
+
+`public/data/entities.json` has two parts:
+
+- `aliases`: border names mapped to codes. Names not listed are matched to modern countries automatically. A value can be a list of `{ "until": 1944, "code": "COD" }` rules for names that change meaning (the 1880 "Congo" is today's DR Congo), or `{ "partOf": "VNM" }` for a territory that is only part of a modern state.
+- `historical`: entities such as `SUN` (USSR), `YUG`, `CSK`, `DDR`, `BRD`, `AUH`, `OTT`, `QING`, `RAJ`, with `from`, `to` and `successors`. Datasets that cover these units directly (Maddison, Polity, V-Dem, RICardo) attach their data to the same code.
+
+How data attaches to a territory:
+
+1. Data for the entity's own code wins, within its `from`/`to` lifetime.
+2. If the entity has a `proxy` (only set when one successor is clearly the core, such as the Russian Empire and Russia), the panel uses the successor's series and marks those rows. The map never paints proxy data.
+3. Otherwise the panel says "No data for this entity in this period" and lists the successor states as buttons that open their present-day data. Nothing is guessed.
+
+## Data sources and pipeline
+
+`npm run data:all` rebuilds everything. Downloads are cached in `scripts/.cache/` (not committed). Run order matters because later steps merge into earlier output.
+
+| Script | Source | Coverage found in the data |
+| --- | --- | --- |
+| `data:worldbank` | World Bank WDI API | 64 indicators, mostly 1960 to 2025 |
+| `data:owid` | Our World in Data grapher CSVs | Long-run population (1600+), life expectancy (1603+), urbanization (1600+), literacy (1650+), child mortality (1751+), CO2 (1750+), oil production (1900+), years of schooling (1870+), V-Dem democracy (1789+) |
+| `data:maddison` | Maddison Project Database 2023 | GDP per capita and GDP, 1600 to 2022 |
+| `data:polity` | Polity5 (Center for Systemic Peace) | Polity score and regime type, 1776 to 2018 (USA to 2020) |
+| `data:jst` | Jorda-Schularick-Taylor Macrohistory R6 | Interest rates, house prices, bank credit, public debt, wages, banking crises: 18 economies, 1870 to 2020 |
+| `data:ricardo` | RICardo (Sciences Po medialab) | Total exports and imports in US$ (Federico-Tena, 1800 to 1938) and top 5 partners |
+| `data:events` | `scripts/data/wars.json` | 86 major wars, 1600 to today (hand-curated, edit freely) |
+| `data:borders` | historical-basemaps | 19 snapshots, 1600 to 2010 |
+| `data:flags` | flagcdn.com | Flag images, saved locally |
+| `data:mock-trade` | Generated | **Mock** product trade, see below |
+| `data:coverage` | All of the above | Writes `firstYear`/`lastYear` and `timeline.json` |
+
+Coverage in the registry is measured from the files, not assumed. Some notes from doing that:
+
+- **Maddison:** the official workbook is on Dataverse, which blocks scripted downloads. The loader uses `scripts/.cache/mpd2023_web.xlsx` when present (download it by hand from the Maddison site) and otherwise reads Our World in Data's copy of the same 2023 release.
+- **Timeline:** a year becomes a slider stop if it is a border snapshot or at least 20 territories have a numeric value. That gives 1600, 1650, 1700, 1710 and so on through the 1700s, then every year from 1789 when V-Dem begins.
+
+## Trade data and mock data
+
+Each territory-year file can hold `exports`, `imports` (top 5 products with share and US$ value) and `partners`. `sources` records where each part came from.
+
+- **Partners 1800 to 1938 are real** (RICardo bilateral flows; shares come from one source table per territory-year so currencies are never mixed).
+- **Products, and partners from 2010 on, are mock data** (`sources.products: "MOCK"`). The panel labels them "Sample data". They exist only for territory-years where the real export and import totals exist, and their dollar values are shares of those real totals. `npm run data:mock-trade -- --clear` removes them all.
+
+To swap in real product data, write files with the same shape (for example from BACI or UN Comtrade), set `sources.products` to the source name, and rebuild the index with `rebuildTradeIndex()` from `scripts/lib/trade.mjs`.
+
+## Known gaps
+
+- **Sovereign credit rating** is not included. There is no free, openly licensed historical source for it.
+- **Wages:** the World Bank has no comparable wage series. The registry uses wage and salaried workers (% of employment) and JST nominal wage growth (18 economies).
+- **Oil:** oil production in TWh (Energy Institute via OWID) plus World Bank oil rents.
+- Pre-colonial polities on the early maps (hundreds of small kingdoms and peoples) have no dataset coverage. They show the "no data" note.
+- Border snapshots end at 2010, so later years use the 2010 map (South Sudan and Kosovo are not drawn separately yet).

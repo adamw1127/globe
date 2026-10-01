@@ -1,0 +1,14 @@
+{
+  "_comment": "Era labels drawn on the timeline slider. 'end' is exclusive; omit it for an open-ended era.",
+  "minYear": 1600,
+  "eras": [
+    { "label": "Age of Trading Companies", "start": 1600, "end": 1800 },
+    { "label": "Industrial Revolution", "start": 1800, "end": 1914 },
+    { "label": "Modern Era", "start": 1914 }
+  ],
+  "coverageNotes": [
+    { "before": 1820, "text": "Limited data before 1820. Most values are long-run estimates for a few territories." },
+    { "before": 1870, "text": "Sparse data before 1870. Estimates cover population, GDP per person and a few political series." },
+    { "before": 1960, "text": "Pre-1960 data comes from historical research datasets and covers fewer territories." }
+  ]
+}
