@@ -117,7 +117,9 @@ for (const r of await readCSV(path.join(warsDir, ucdpFile), 'utf8')) {
   const interstate = r.type_of_conflict === '2';
   if (r.intensity_level !== '2') continue;
   if (year <= (interstate ? COW_LAST.inter : COW_LAST.intra)) continue;
-  const name = `${r.location}: ${r.side_a.replace(/^Government of /, '')} vs. ${r.side_b.replace(/^Government of /, '')}`;
+  // UCDP side names carry former names in parentheses ("Russia (Soviet Union)").
+  const side = (x) => x.replace(/Government of /g, '').replace(/\s*\([^)]*\)/g, '').trim();
+  const name = `${side(r.side_a)} vs. ${side(r.side_b)}`;
   const list = (s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : []);
   for (const gw of [...list(r.gwno_a), ...list(r.gwno_b)]) add(gwEntity(gw, year), year, year, name);
   for (const gw of [...list(r.gwno_a_2nd), ...list(r.gwno_b_2nd)]) add(gwEntity(gw, year), year, year, `${name} (supporting party)`);
