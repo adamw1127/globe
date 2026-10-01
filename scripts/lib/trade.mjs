@@ -20,9 +20,10 @@ export async function patchTradeFile(code, year, patch) {
   await writeJSON(file, next);
 }
 
-// Removes one kind of content ("products" or "partners") from every file,
-// so a loader can rebuild its part from scratch.
-export async function clearTradeContent(kind) {
+// Removes one kind of content ("products" or "partners") from every file
+// whose recorded source matches `fromSource` (a function of the source
+// string), so a loader can rebuild its own part without touching others.
+export async function clearTradeContent(kind, fromSource = () => true) {
   let dirs = [];
   try {
     dirs = await fs.readdir(TRADE_DIR);
@@ -35,18 +36,15 @@ export async function clearTradeContent(kind) {
     for (const f of await fs.readdir(dir)) {
       const file = path.join(dir, f);
       const d = await readJSON(file);
+      const src = d.sources?.[kind];
+      if (src === undefined || !fromSource(src)) continue;
       if (kind === 'products') {
         delete d.exports;
         delete d.imports;
-        // Mock partners are generated together with mock products.
-        if (d.sources?.partners === 'MOCK') { delete d.partners; delete d.sources.partners; }
-      }
-      if (kind === 'partners') {
-        // Mock partners belong to the mock product generator; leave them.
-        if (d.sources?.partners === 'MOCK') continue;
+      } else {
         delete d.partners;
       }
-      if (d.sources) delete d.sources[kind];
+      delete d.sources[kind];
       if (!d.exports && !d.partners) await fs.rm(file);
       else await writeJSON(file, d);
     }

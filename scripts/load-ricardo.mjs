@@ -121,7 +121,7 @@ for (const [id, series] of Object.entries(totals)) {
 // Top partners: within each territory-year-direction pick the single
 // source table with the most partners (preferring general trade), so
 // shares are never mixed across currencies or definitions.
-await clearTradeContent('partners');
+await clearTradeContent('partners', (src) => src.startsWith('RICardo'));
 const perFile = new Map();
 for (const [key, groups] of bilateral) {
   const [code, year, dir] = key.split('|');

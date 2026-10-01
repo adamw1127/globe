@@ -17,9 +17,9 @@
     "data:events": "node scripts/build-events.mjs",
     "data:borders": "node scripts/build-borders.mjs",
     "data:flags": "node scripts/fetch-flags.mjs",
-    "data:mock-trade": "node scripts/generate-mock-trade.mjs",
     "data:coverage": "node scripts/update-coverage.mjs",
-    "data:all": "npm run data:worldbank && npm run data:owid && npm run data:maddison && npm run data:polity && npm run data:jst && npm run data:ricardo && npm run data:events && npm run data:borders && npm run data:flags && npm run data:mock-trade && npm run data:coverage"
+    "data:all": "npm run data:worldbank && npm run data:owid && npm run data:maddison && npm run data:polity && npm run data:jst && npm run data:ricardo && npm run data:events && npm run data:borders && npm run data:flags && npm run data:atlas && npm run data:coverage",
+    "data:atlas": "node scripts/load-atlas.mjs"
   },
   "dependencies": {
     "globe.gl": "^2.46.2",

@@ -93,7 +93,7 @@ How data attaches to a territory:
 | `data:events` | `scripts/data/wars.json` | 86 major wars, 1600 to today (hand-curated, edit freely) |
 | `data:borders` | historical-basemaps | 19 snapshots, 1600 to 2010 |
 | `data:flags` | flagcdn.com | Flag images, saved locally |
-| `data:mock-trade` | Generated | **Mock** product trade, see below |
+| `data:atlas` | Atlas of Economic Complexity (Harvard Growth Lab) API | Top 5 products and partners, goods only, 1962 to 2024 |
 | `data:coverage` | All of the above | Writes `firstYear`/`lastYear` and `timeline.json` |
 
 Coverage in the registry is measured from the files, not assumed. Some notes from doing that:
@@ -101,14 +101,18 @@ Coverage in the registry is measured from the files, not assumed. Some notes fro
 - **Maddison:** the official workbook is on Dataverse, which blocks scripted downloads. The loader uses `scripts/.cache/mpd2023_web.xlsx` when present (download it by hand from the Maddison site) and otherwise reads Our World in Data's copy of the same 2023 release.
 - **Timeline:** a year becomes a slider stop if it is a border snapshot or at least 20 territories have a numeric value. That gives 1600, 1650, 1700, 1710 and so on through the 1700s, then every year from 1789 when V-Dem begins.
 
-## Trade data and mock data
+## Trade data
 
-Each territory-year file can hold `exports`, `imports` (top 5 products with share and US$ value) and `partners`. `sources` records where each part came from.
+There is no mock or generated data anywhere in the app. Each territory-year trade file can hold `exports` and `imports` (top 5 products) and `partners` (top 5 export and import partners), each with a share of the total and a US$ value. `sources` names where each part came from.
 
-- **Partners 1800 to 1938 are real** (RICardo bilateral flows; shares come from one source table per territory-year so currencies are never mixed).
-- **Products, and partners from 2010 on, are mock data** (`sources.products: "MOCK"`). The panel labels them "Sample data". They exist only for territory-years where the real export and import totals exist, and their dollar values are shares of those real totals. `npm run data:mock-trade -- --clear` removes them all.
+- **1800 to 1938: RICardo.** Partners come from bilateral flows. Shares are computed within one source table per territory-year, so currencies are never mixed. RICardo has no product breakdown.
+- **1962 to 2024: Atlas of Economic Complexity.** Products are SITC rev. 2 four-digit codes for 1962 to 1994 and HS 1992 four-digit codes from 1995 (the code shows in the chart tooltip). Shares are of total goods trade; services are excluded.
+- **1939 to 1961:** no source covers these years, so the panel says trade detail is not available.
 
-To swap in real product data, write files with the same shape (for example from BACI or UN Comtrade), set `sources.products` to the source name, and rebuild the index with `rebuildTradeIndex()` from `scripts/lib/trade.mjs`.
+Two Atlas series are handled specially for accuracy:
+
+- **Russia before 1992:** Atlas files Soviet trade under Russia's code, built only from partners' reports, so it understates Soviet trade several times over. These years are left out.
+- **Germany before 1991:** this is West Germany, so it is attached to `BRD`.
 
 ## Known gaps
 
