@@ -65,7 +65,7 @@ Borders come from [historical-basemaps](https://github.com/aourednik/historical-
 - `ENTITY`: the data entity code (an ISO3 code, a historical key, `PART:<ISO3>`, or null)
 - `RULER`: the ruling power when the territory is subject to another (used for "Colonial status")
 
-The app shows the latest snapshot at or before the selected year and tells the user which one. Using a later snapshot would show states before they existed (for example post-Soviet borders in 1980), so an earlier map is used even when a later one is closer.
+From 2011 the borders come from Natural Earth: the 2011 snapshot draws Crimea in Ukraine, the 2014 snapshot follows Natural Earth's de facto borders (Crimea under Russia), which is also how the World Bank's Ukraine figures are compiled from 2014. The app shows the latest snapshot at or before the selected year and tells the user which one. Using a later snapshot would show states before they existed (for example post-Soviet borders in 1980), so an earlier map is used even when a later one is closer.
 
 `public/data/entities.json` has two parts:
 
@@ -91,10 +91,12 @@ How data attaches to a territory:
 | `data:jst` | Jorda-Schularick-Taylor Macrohistory R6 | Interest rates, house prices, bank credit, public debt, wages, banking crises: 18 economies, 1870 to 2020 |
 | `data:ricardo` | RICardo (Sciences Po medialab) | Total exports and imports in US$ (Federico-Tena, 1800 to 1938) and top 5 partners |
 | `data:wars` | Brecke Conflict Catalog, Correlates of War, UCDP/PRIO | Wars each territory took part in, 1600 to 2025 (see below) |
-| `data:borders` | historical-basemaps | 19 snapshots, 1600 to 2010 |
+| `data:borders` | historical-basemaps; Natural Earth | 19 historical snapshots, 1600 to 2010, plus current borders (2011, 2014) |
 | `data:flags` | flagcdn.com | Flag images, saved locally |
 | `data:atlas` | Atlas of Economic Complexity (Harvard Growth Lab) API | Top 5 products and partners, goods only, 1962 to 2024 |
 | `data:sess` | Official Soviet trade statistics via SESS (Hokkaido University) | USSR partners and commodity groups, 1946 to 1989 |
+| `data:imf` | IMF International Trade in Goods (Direction of Trade) API | Partners for territory-years still uncovered, 1948 onward |
+| `data:cow-trade` | Correlates of War Trade v4.0 | Partners for territory-years still uncovered, 1870 to 2014 (mainly 1939 to 1947) |
 | `data:coverage` | All of the above | Writes `firstYear`/`lastYear` and `timeline.json` |
 
 Coverage in the registry is measured from the files, not assumed. Some notes from doing that:
@@ -108,8 +110,12 @@ There is no mock or generated data anywhere in the app. Each territory-year trad
 
 - **1800 to 1938: RICardo.** Partners come from bilateral flows. Shares are computed within one source table per territory-year, so currencies are never mixed. RICardo has no product breakdown.
 - **1962 to 2024: Atlas of Economic Complexity.** Products are SITC rev. 2 four-digit codes for 1962 to 1994 and HS 1992 four-digit codes from 1995 (the code shows in the chart tooltip). Shares are of total goods trade; services are excluded.
-- **USSR, 1946 to 1989: official Soviet statistics** (*Vneshnyaya torgovlya SSSR*, the foreign-trade yearbooks), as digitized in the Soviet and Russian Economic Statistical Series at Hokkaido University. Partners are by country; products are the broad Soviet commodity groups. Values are shown in rubles, as published. Part of Soviet exports was never attributed to a named country (widely believed to be mostly arms). A year's top 5 partners is only shown when that unattributed share is smaller than the fifth partner's share, so no hidden country could outrank one shown; otherwise the panel says so and gives the share. The source has no figures for 1990 and 1991.
-- **1939 to 1961 (other territories):** no source covers these years, so the panel says trade detail is not available.
+- **USSR, 1946 to 1989: official Soviet statistics** (*Vneshnyaya torgovlya SSSR*, the foreign-trade yearbooks), as digitized in the Soviet and Russian Economic Statistical Series at Hokkaido University. Partners are by country; products are the broad Soviet commodity groups. Values are shown in rubles, as published. Part of Soviet exports was never attributed to a named country (widely believed to be mostly arms). The tables give subtotals for socialist, developed and developing countries, so the unattributed remainder is known per region; partners are ranked with the rule below. The source has no figures for 1990 and 1991.
+- **Gaps, 1948 onward: IMF** trade-by-partner statistics, used for any territory-year the sources above do not cover (for example 1948 to 1961, or Czechoslovakia and Yugoslavia).
+- **Remaining gaps, mainly 1939 to 1947: Correlates of War Trade v4.0** (League of Nations data compiled by Hicks).
+- **Products before 1962:** I found no open dataset with product-level trade by country before 1962 (the Atlas's SITC data starts that year), so product charts start in 1962, or 1946 for the USSR's commodity groups.
+
+**Ranking rule (all partner sources).** Every source leaves some trade unattributed to a named country (the IMF's "other countries", "special categories" for military goods, regional "not specified" lines, or a national total larger than the sum of partners). A partner is only shown if it is larger than the largest such bucket, because an unlisted country can hide in at most one bucket. So the panel shows the top 5 when that is certain, otherwise as many as can be ranked with a note giving the unattributed share. Economies outside IMF reporting (the Soviet bloc before joining) are skipped by the IMF and Correlates of War loaders, because their partner figures are rebuilt from other countries' records and miss trade inside the bloc (`scripts/lib/non-reporting.mjs`).
 
 Two Atlas series are handled specially for accuracy:
 
@@ -134,4 +140,4 @@ Rebel groups and polities without a data entity are skipped; the script prints t
 - **Wages:** the World Bank has no comparable wage series. The registry uses wage and salaried workers (% of employment) and JST nominal wage growth (18 economies).
 - **Oil:** oil production in TWh (Energy Institute via OWID) plus World Bank oil rents.
 - Pre-colonial polities on the early maps (hundreds of small kingdoms and peoples) have no dataset coverage. They show the "no data" note.
-- Border snapshots end at 2010, so later years use the 2010 map (South Sudan and Kosovo are not drawn separately yet).
+- Kosovo (independent 2008) is drawn separately from 2011, when the Natural Earth borders start; the 2010 historical map does not separate it.

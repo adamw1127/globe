@@ -1067,9 +1067,15 @@
     "Turkish Cypriot-administered area": "CYP",
     "Tuscany": "TUS",
     "USSR": "SUN",
-    "Ukraine": {
-      "partOf": "UKR"
-    },
+    "Ukraine": [
+      {
+        "until": 1922,
+        "code": "PART:UKR"
+      },
+      {
+        "code": "UKR"
+      }
+    ],
     "Union of South Africa": "ZAF",
     "United Kingdom of Great Britain and Ireland": "GBR",
     "United Provinces": "NLD",

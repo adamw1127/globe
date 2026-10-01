@@ -1,5 +1,5 @@
 {
-  "source": "historical-basemaps by A. Ourednik (GPL-3.0), https://github.com/aourednik/historical-basemaps",
+  "source": "historical-basemaps by A. Ourednik (GPL-3.0), to 2010; Natural Earth admin-0 countries (public domain) from 2011",
   "snapshots": [
     1600,
     1650,
@@ -19,6 +19,8 @@
     1960,
     1994,
     2000,
-    2010
+    2010,
+    2011,
+    2014
   ]
 }

@@ -11,14 +11,14 @@
 //
 // The tables use 0 for "no figure", and part of Soviet exports was never
 // attributed to a named country (mostly to developing countries, widely
-// believed to be arms). A year's top 5 partners is only published when the
-// value not attributed to a listed country is smaller than the 5th
-// partner's, so no unlisted country can outrank one that is shown.
+// believed to be arms). A partner is only shown when it is larger than the
+// largest unattributed remainder it could be competing with (safeTop), so
+// no unlisted country can outrank one that is shown.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { CACHE_DIR, round } from './lib/util.mjs';
 import { parseCSVLine } from './lib/owid.mjs';
-import { patchTradeFile, clearTradeContent, rebuildTradeIndex } from './lib/trade.mjs';
+import { patchTradeFile, clearTradeContent, rebuildTradeIndex, safeTop, rankingNote } from './lib/trade.mjs';
 
 const BASE = 'https://src-h.slav.hokudai.ac.jp/database/USSR';
 const SOURCE = 'Official Soviet trade statistics (Vneshnyaya torgovlya SSSR) via SESS, Hokkaido University';
@@ -58,30 +58,44 @@ async function table(name) {
 }
 
 // Partners: "Exports, Poland, N" -> "Poland" (N = nominal value).
-function partnerRanking(rows) {
+// Rows are coded by region: S71x11... socialist countries, S71x12...
+// developed capitalist, S71x13... developing, each with a subtotal row.
+// Trade not attributed to a named country is computed per region, since an
+// unlisted country can only hide in its own region's remainder.
+const REGIONS = [
+  { subtotal: /Socialist Countries, N$/, prefix: 11 },
+  { subtotal: /Capitalist Countries, N$/, prefix: 12 },
+  { subtotal: /Develop+ing Countries, N$/, prefix: 13 },
+];
+function partnerRanking(rows, kind) {
   const total = rows.find((r) => /^(Exports|Imports), Total, N$/.test(r.name));
   const countries = rows
     .filter((r) => r.name.endsWith(', N') && !AGGREGATE.test(r.name))
-    .map((r) => ({ ...r, label: r.name.replace(/^(Exports|Imports), /, '').replace(/, N$/, '') }));
+    .map((r) => ({ ...r, label: r.name.replace(/^(Exports|Imports), /, '').replace(/, N$/, ''), region: Number(r.code.slice(4, 6)) }));
   const out = new Map();
-  const unranked = new Map(); // year -> % of total not attributed to a listed country
+  const notes = new Map();
   for (const year of total.years) {
     const t = total.values[year];
     if (!(t > 0)) continue;
-    const list = countries.filter((c) => c.values[year] > 0);
-    const covered = list.reduce((a, c) => a + c.values[year], 0);
-    const top = list.sort((a, b) => b.values[year] - a.values[year]).slice(0, 5);
-    if (top.length < 5 || t - covered >= top[4].values[year]) {
-      if (covered > 0) unranked.set(year, round(((t - covered) / t) * 100));
-      continue;
+    const list = countries.filter((c) => c.values[year] > 0).sort((a, b) => b.values[year] - a.values[year]);
+    if (!list.length) continue;
+    const attributed = list.reduce((a, c) => a + c.values[year], 0);
+    // Largest remainder a single unlisted country could hide in.
+    const subtotals = REGIONS.map((reg) => ({ reg, value: rows.find((r) => reg.subtotal.test(r.name))?.values[year] ?? 0 }));
+    let hidden;
+    if (subtotals.every((s) => s.value > 0)) {
+      const residuals = subtotals.map(({ reg, value }) => value - list.filter((c) => c.region === reg.prefix).reduce((a, c) => a + c.values[year], 0));
+      residuals.push(t - subtotals.reduce((a, s) => a + s.value, 0));
+      hidden = Math.max(0, ...residuals);
+    } else {
+      hidden = Math.max(0, t - attributed);
     }
-    out.set(year, top.map((c) => ({
-      name: DISPLAY[c.label] ?? c.label,
-      share: round((c.values[year] / t) * 100),
-      value: round(c.values[year] * 1e6),
-    })));
+    const top = safeTop(list.map((c) => ({ name: DISPLAY[c.label] ?? c.label, value: c.values[year] })), hidden);
+    const note = rankingNote(kind, top.length, round(((t - attributed) / t) * 100));
+    if (note) notes.set(year, note);
+    if (top.length) out.set(year, top.map((c) => ({ name: c.name, share: round((c.value / t) * 100), value: round(c.value * 1e6) })));
   }
-  return { ranking: out, unranked, totals: total.values };
+  return { ranking: out, notes, totals: total.values };
 }
 
 // Commodity groups for the whole USSR (not the "to socialist / capitalist
@@ -124,8 +138,8 @@ const GROUP_NAMES = {
   'Ind. Goods for Public Cosum': 'Consumer manufactures',
 };
 
-const exp = partnerRanking(await table('S712'));
-const imp = partnerRanking(await table('S713'));
+const exp = partnerRanking(await table('S712'), 'exports');
+const imp = partnerRanking(await table('S713'), 'imports');
 const gExp = groupRanking(await table('S721'), exp.totals);
 const gImp = groupRanking(await table('S722'), imp.totals);
 
@@ -139,9 +153,7 @@ for (const year of [...years].sort()) {
     patch.partners = {};
     if (exp.ranking.has(year)) patch.partners.exports = exp.ranking.get(year);
     if (imp.ranking.has(year)) patch.partners.imports = imp.ranking.get(year);
-    const notes = [];
-    if (exp.unranked.has(year)) notes.push(`Export partners are not ranked: ${exp.unranked.get(year)}% of exports is not attributed to a named country in the official statistics, enough to change the top 5.`);
-    if (imp.unranked.has(year)) notes.push(`Import partners are not ranked: ${imp.unranked.get(year)}% of imports is not attributed to a named country in the official statistics, enough to change the top 5.`);
+    const notes = [exp.notes.get(year), imp.notes.get(year)].filter(Boolean);
     if (notes.length) patch.partners.note = notes.join(' ');
     patch.sources.partners = SOURCE;
   }
@@ -156,4 +168,4 @@ for (const year of [...years].sort()) {
   n++;
 }
 await rebuildTradeIndex();
-console.log(`  sess: ${n} USSR trade years; export partners not ranked in ${[...exp.unranked.keys()].join(', ') || 'no years'}; import partners not ranked in ${[...imp.unranked.keys()].join(', ') || 'no years'}`);
+console.log(`  sess: ${n} USSR trade years; years with fewer than 5 export partners ranked: ${[...exp.notes.keys()].join(', ') || 'none'}; imports: ${[...imp.notes.keys()].join(', ') || 'none'}`);

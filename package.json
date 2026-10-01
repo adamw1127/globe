@@ -17,10 +17,12 @@
     "data:borders": "node scripts/build-borders.mjs",
     "data:flags": "node scripts/fetch-flags.mjs",
     "data:coverage": "node scripts/update-coverage.mjs",
-    "data:all": "npm run data:worldbank && npm run data:owid && npm run data:maddison && npm run data:polity && npm run data:jst && npm run data:ricardo && npm run data:wars && npm run data:borders && npm run data:flags && npm run data:atlas && npm run data:sess && npm run data:coverage",
+    "data:all": "npm run data:worldbank && npm run data:owid && npm run data:maddison && npm run data:polity && npm run data:jst && npm run data:ricardo && npm run data:wars && npm run data:borders && npm run data:flags && npm run data:atlas && npm run data:sess && npm run data:imf && npm run data:cow-trade && npm run data:coverage",
     "data:atlas": "node scripts/load-atlas.mjs",
     "data:sess": "node scripts/load-sess.mjs",
-    "data:wars": "node scripts/load-wars.mjs"
+    "data:wars": "node scripts/load-wars.mjs",
+    "data:imf": "node scripts/load-imf-trade.mjs",
+    "data:cow-trade": "node scripts/load-cow-trade.mjs"
   },
   "dependencies": {
     "globe.gl": "^2.46.2",

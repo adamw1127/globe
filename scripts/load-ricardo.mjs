@@ -64,7 +64,7 @@ function codeFor(ric, year) {
   }
   return null;
 }
-const displayName = (ric) => ric.replace(/\s*\(.*$/, '');
+const displayName = (ric, year) => (ric === 'Russia (USSR)' && year >= 1922 ? 'Soviet Union' : ric.replace(/\s*\(.*$/, ''));
 
 const names = new Map((await readCSV('entity_names.csv')).map((r) => [r.original_name, r.RICname]));
 const entityType = new Map((await readCSV('RICentities.csv')).map((r) => [r.RICname, r.type]));
@@ -134,7 +134,7 @@ for (const [key, groups] of bilateral) {
   if (best.pm.size < 3 || total <= 0) continue;
   const usdTotal = totals[dir === 'Exp' ? 'exports_usd' : 'imports_usd'][code]?.[year];
   const top = [...best.pm].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([p, v]) => ({
-    name: displayName(p),
+    name: displayName(p, Number(year)),
     share: round((v / total) * 100),
     value: usdTotal ? round((v / total) * usdTotal) : null,
   }));

@@ -72,3 +72,25 @@ export async function rebuildTradeIndex() {
   await writeJSON(path.join(TRADE_DIR, 'index.json'), index);
   return index;
 }
+
+// Partners that can be ranked with certainty. `list` is [{ name, value }]
+// sorted by value; `hidden` is the largest amount of trade not attributed
+// to a listed partner that could belong to a single unlisted partner.
+// A partner is only shown if it is larger than that, so no unlisted
+// partner can outrank it. Returns up to `max` entries.
+export function safeTop(list, hidden, max = 5) {
+  const out = [];
+  for (const p of list) {
+    if (out.length === max || !(p.value > hidden)) break;
+    out.push(p);
+  }
+  return out;
+}
+
+// Note shown when fewer than five partners could be ranked.
+export function rankingNote(kind, shown, hiddenShare) {
+  if (shown >= 5) return null;
+  const what = kind === 'exports' ? 'export' : 'import';
+  const count = shown ? `Only the top ${shown} ${what} partner${shown > 1 ? 's' : ''} can be ranked` : `${what[0].toUpperCase()}${what.slice(1)} partners cannot be ranked`;
+  return `${count}: ${hiddenShare}% of ${kind} is not attributed to a named country in the source, enough to change the order below that.`;
+}

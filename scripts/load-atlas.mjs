@@ -122,7 +122,14 @@ await pool(countries, 2, async (c) => {
     const p = productNames.get(r.productId);
     return p && !UNSPECIFIED.test(p.name) ? p : null;
   };
-  const partnerName = (r) => countryById.get(r.partnerCountryId)?.nameShortEn;
+  // Atlas uses today's codes for partners in all years: before 1991 "Germany"
+  // is West Germany and before 1992 "Russia" is the Soviet Union.
+  const partnerName = (r) => {
+    const c = countryById.get(r.partnerCountryId);
+    if (c?.iso3Code === 'DEU' && r.year < 1991) return 'West Germany';
+    if (c?.iso3Code === 'RUS' && r.year < 1992) return 'Soviet Union';
+    return c?.nameShortEn;
+  };
 
   const exp = topFive(products, 'exportValue', productName, goodsTotals('exportValue'));
   const imp = topFive(products, 'importValue', productName, goodsTotals('importValue'));
