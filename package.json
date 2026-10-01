@@ -1,0 +1,46 @@
+{
+  "name": "globe",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "data:worldbank": "node scripts/fetch-worldbank.mjs",
+    "data:owid": "node scripts/fetch-owid.mjs",
+    "data:maddison": "node scripts/load-maddison.mjs",
+    "data:polity": "node scripts/load-polity.mjs",
+    "data:jst": "node scripts/load-jst.mjs",
+    "data:ricardo": "node scripts/load-ricardo.mjs",
+    "data:borders": "node scripts/build-borders.mjs",
+    "data:flags": "node scripts/fetch-flags.mjs",
+    "data:coverage": "node scripts/update-coverage.mjs",
+    "data:all": "npm run data:worldbank && npm run data:owid && npm run data:maddison && npm run data:polity && npm run data:jst && npm run data:ricardo && npm run data:wars && npm run data:borders && npm run data:flags && npm run data:atlas && npm run data:sess && npm run data:imf && npm run data:cow-trade && npm run data:coverage",
+    "data:atlas": "node scripts/load-atlas.mjs",
+    "data:sess": "node scripts/load-sess.mjs",
+    "data:wars": "node scripts/load-wars.mjs",
+    "data:imf": "node scripts/load-imf-trade.mjs",
+    "data:cow-trade": "node scripts/load-cow-trade.mjs",
+    "build:artifact": "node scripts/build-artifact.mjs"
+  },
+  "dependencies": {
+    "globe.gl": "^2.46.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "recharts": "^3.10.1",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "mapshaper": "^0.7.71",
+    "oxlint": "^1.81.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0",
+    "xlsx": "^0.18.5"
+  }
+}

@@ -1,0 +1,96 @@
+// Per-territory, per-year trade files: public/data/trade/<CODE>/<year>.json
+//   { exports: [{ product, share, value }], imports: [...],
+//     partners: { exports: [{ name, share, value }], imports: [...] },
+//     sources: { products, partners } }
+// Writers merge into existing files so product and partner loaders can run
+// independently.
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { DATA_DIR, readJSON, writeJSON } from './util.mjs';
+
+export const TRADE_DIR = path.join(DATA_DIR, 'trade');
+
+export async function patchTradeFile(code, year, patch) {
+  const file = path.join(TRADE_DIR, code, `${year}.json`);
+  let cur = {};
+  try {
+    cur = await readJSON(file);
+  } catch {}
+  const next = { ...cur, ...patch, sources: { ...(cur.sources ?? {}), ...(patch.sources ?? {}) } };
+  await writeJSON(file, next);
+}
+
+// Removes one kind of content ("products" or "partners") from every file
+// whose recorded source matches `fromSource` (a function of the source
+// string), so a loader can rebuild its own part without touching others.
+export async function clearTradeContent(kind, fromSource = () => true) {
+  let dirs = [];
+  try {
+    dirs = await fs.readdir(TRADE_DIR);
+  } catch {
+    return;
+  }
+  for (const code of dirs) {
+    const dir = path.join(TRADE_DIR, code);
+    if (!(await fs.stat(dir)).isDirectory()) continue;
+    for (const f of await fs.readdir(dir)) {
+      const file = path.join(dir, f);
+      const d = await readJSON(file);
+      const src = d.sources?.[kind];
+      if (src === undefined || !fromSource(src)) continue;
+      if (kind === 'products') {
+        delete d.exports;
+        delete d.imports;
+      } else {
+        delete d.partners;
+      }
+      delete d.sources[kind];
+      if (!d.exports && !d.partners) await fs.rm(file);
+      else await writeJSON(file, d);
+    }
+    if (!(await fs.readdir(dir)).length) await fs.rm(dir, { recursive: true });
+  }
+}
+
+// index.json: { CODE: { products: [years], partners: [years] } }
+export async function rebuildTradeIndex() {
+  const index = {};
+  for (const code of (await fs.readdir(TRADE_DIR)).sort()) {
+    const dir = path.join(TRADE_DIR, code);
+    if (!(await fs.stat(dir)).isDirectory()) continue;
+    const entry = { products: [], partners: [] };
+    for (const f of await fs.readdir(dir)) {
+      const d = await readJSON(path.join(dir, f));
+      const y = Number(f.replace('.json', ''));
+      if (d.exports?.length) entry.products.push(y);
+      if (d.partners) entry.partners.push(y);
+    }
+    entry.products.sort((a, b) => a - b);
+    entry.partners.sort((a, b) => a - b);
+    index[code] = entry;
+  }
+  await writeJSON(path.join(TRADE_DIR, 'index.json'), index);
+  return index;
+}
+
+// Partners that can be ranked with certainty. `list` is [{ name, value }]
+// sorted by value; `hidden` is the largest amount of trade not attributed
+// to a listed partner that could belong to a single unlisted partner.
+// A partner is only shown if it is larger than that, so no unlisted
+// partner can outrank it. Returns up to `max` entries.
+export function safeTop(list, hidden, max = 5) {
+  const out = [];
+  for (const p of list) {
+    if (out.length === max || !(p.value > hidden)) break;
+    out.push(p);
+  }
+  return out;
+}
+
+// Note shown when fewer than five partners could be ranked.
+export function rankingNote(kind, shown, hiddenShare) {
+  if (shown >= 5) return null;
+  const what = kind === 'exports' ? 'export' : 'import';
+  const count = shown ? `Only the top ${shown} ${what} partner${shown > 1 ? 's' : ''} can be ranked` : `${what[0].toUpperCase()}${what.slice(1)} partners cannot be ranked`;
+  return `${count}: ${hiddenShare}% of ${kind} is not attributed to a named country in the source, enough to change the order below that.`;
+}

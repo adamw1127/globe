@@ -1,0 +1,1361 @@
+{
+  "_comment": "Metrics registry. The UI renders entirely from this file. Each metric needs a data file at public/data/metrics/<id>.json shaped { entityCode: { year: value } }. firstYear/lastYear are written by scripts/update-coverage.mjs from the real data.",
+  "formats": [
+    "usd",
+    "usd_compact",
+    "percent",
+    "compact",
+    "integer",
+    "decimal1",
+    "decimal2",
+    "label",
+    "events"
+  ],
+  "metrics": [
+    {
+      "id": "gdp",
+      "name": "GDP",
+      "category": "economy",
+      "priority": 1,
+      "source": "World Bank WDI",
+      "unit": "current US$",
+      "format": "usd_compact",
+      "firstYear": 1960,
+      "description": "Gross domestic product at market prices, current US dollars.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NY.GDP.MKTP.CD"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "gdp_per_capita",
+      "name": "GDP per capita",
+      "category": "economy",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "current US$",
+      "format": "usd",
+      "firstYear": 1960,
+      "description": "GDP divided by midyear population, current US dollars.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NY.GDP.PCAP.CD"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "maddison_gdppc",
+      "name": "GDP per capita (long-run, PPP)",
+      "category": "economy",
+      "priority": 2.5,
+      "source": "Maddison Project Database 2023 (Bolt and van Zanden)",
+      "unit": "2011 int-$",
+      "format": "usd",
+      "firstYear": 1600,
+      "description": "GDP per person adjusted for inflation and price differences, in 2011 international dollars. Comparable across centuries.",
+      "loader": {
+        "type": "maddison"
+      },
+      "lastYear": 2022
+    },
+    {
+      "id": "maddison_gdp",
+      "name": "GDP (long-run, PPP)",
+      "category": "economy",
+      "priority": 2.6,
+      "source": "Maddison Project Database 2023 (Bolt and van Zanden)",
+      "unit": "2011 int-$",
+      "format": "usd_compact",
+      "firstYear": 1600,
+      "description": "Total GDP in 2011 international dollars (GDP per capita times population).",
+      "loader": {
+        "type": "maddison"
+      },
+      "lastYear": 2022
+    },
+    {
+      "id": "gdp_growth",
+      "name": "GDP growth",
+      "category": "economy",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "% per year",
+      "format": "percent",
+      "firstYear": 1961,
+      "description": "Annual growth of real GDP at constant prices.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NY.GDP.MKTP.KD.ZG"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "inflation",
+      "name": "Inflation (CPI)",
+      "category": "economy",
+      "priority": 4,
+      "source": "World Bank WDI",
+      "unit": "% per year",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Annual change in consumer prices.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "FP.CPI.TOTL.ZG"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "unemployment",
+      "name": "Unemployment",
+      "category": "economy",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "% of labor force",
+      "format": "percent",
+      "firstYear": 1991,
+      "description": "Share of the labor force without work (ILO modeled estimate).",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SL.UEM.TOTL.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "agriculture_share",
+      "name": "Agriculture share of GDP",
+      "category": "economy",
+      "priority": 10,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Agriculture, forestry and fishing value added.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NV.AGR.TOTL.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "industry_share",
+      "name": "Industry share of GDP",
+      "category": "economy",
+      "priority": 11,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Industry (including construction) value added.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NV.IND.TOTL.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "services_share",
+      "name": "Services share of GDP",
+      "category": "economy",
+      "priority": 12,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Services value added.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NV.SRV.TOTL.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "labor_force_participation",
+      "name": "Labor force participation",
+      "category": "economy",
+      "priority": 13,
+      "source": "World Bank WDI",
+      "unit": "% of pop. 15+",
+      "format": "percent",
+      "firstYear": 1990,
+      "description": "Share of the population aged 15+ that is economically active.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SL.TLF.CACT.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "wage_workers",
+      "name": "Wage & salaried workers",
+      "category": "economy",
+      "priority": 14,
+      "source": "World Bank WDI",
+      "unit": "% of employment",
+      "format": "percent",
+      "firstYear": 1991,
+      "description": "Share of workers in paid employment (a proxy for formal wage work).",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SL.EMP.WORK.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "jst_wage_growth",
+      "name": "Nominal wage growth",
+      "category": "economy",
+      "priority": 13.5,
+      "source": "Jorda-Schularick-Taylor Macrohistory Database R6",
+      "unit": "% per year",
+      "format": "percent",
+      "firstYear": 1871,
+      "description": "Annual change in nominal wages. Covers 18 advanced economies.",
+      "loader": {
+        "type": "jst"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "poverty_rate",
+      "name": "Poverty rate ($3.00/day)",
+      "category": "economy",
+      "priority": 15,
+      "source": "World Bank WDI",
+      "unit": "% of population",
+      "format": "percent",
+      "firstYear": 1963,
+      "description": "Share living on less than $3.00 a day (2021 PPP).",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SI.POV.DDAY"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "gini",
+      "name": "Income inequality (Gini)",
+      "category": "economy",
+      "priority": 16,
+      "source": "World Bank WDI",
+      "unit": "index 0-100",
+      "format": "decimal1",
+      "firstYear": 1963,
+      "description": "Gini index of income or consumption inequality. 0 is perfect equality.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SI.POV.GINI"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "investment",
+      "name": "Investment",
+      "category": "economy",
+      "priority": 17,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Gross capital formation.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NE.GDI.TOTL.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "savings",
+      "name": "Savings rate",
+      "category": "economy",
+      "priority": 18,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Gross national savings.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NY.GNS.ICTR.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "lending_rate",
+      "name": "Lending interest rate",
+      "category": "finance",
+      "priority": 1,
+      "source": "World Bank WDI",
+      "unit": "%",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Bank rate on short- and medium-term loans to the private sector.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "FR.INR.LEND"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "deposit_rate",
+      "name": "Deposit interest rate",
+      "category": "finance",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "%",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Rate paid by banks on demand, time or savings deposits.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "FR.INR.DPST"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "real_interest_rate",
+      "name": "Real interest rate",
+      "category": "finance",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "%",
+      "format": "percent",
+      "firstYear": 1961,
+      "description": "Lending rate adjusted for inflation (GDP deflator).",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "FR.INR.RINR"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "jst_ltrate",
+      "name": "Long-term interest rate",
+      "category": "finance",
+      "priority": 3.2,
+      "source": "Jorda-Schularick-Taylor Macrohistory Database R6",
+      "unit": "%",
+      "format": "percent",
+      "firstYear": 1870,
+      "description": "Yield on long-term government bonds. Covers 18 advanced economies.",
+      "loader": {
+        "type": "jst"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "jst_stir",
+      "name": "Short-term interest rate",
+      "category": "finance",
+      "priority": 3.4,
+      "source": "Jorda-Schularick-Taylor Macrohistory Database R6",
+      "unit": "%",
+      "format": "percent",
+      "firstYear": 1870,
+      "description": "Short-term (money market or bill) rate. Covers 18 advanced economies.",
+      "loader": {
+        "type": "jst"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "exchange_rate",
+      "name": "Exchange rate",
+      "category": "finance",
+      "priority": 4,
+      "source": "World Bank WDI",
+      "unit": "LCU per US$",
+      "format": "decimal2",
+      "firstYear": 1960,
+      "description": "Official exchange rate, local currency units per US dollar, period average.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "PA.NUS.FCRF"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "broad_money",
+      "name": "Money supply (broad money)",
+      "category": "finance",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Broad money (M2/M3) relative to GDP.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "FM.LBL.BMNY.GD.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "private_credit",
+      "name": "Credit to private sector",
+      "category": "finance",
+      "priority": 6,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Domestic credit to the private sector.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "FS.AST.PRVT.GD.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "jst_bank_credit",
+      "name": "Bank lending to private sector",
+      "category": "finance",
+      "priority": 6.5,
+      "source": "Jorda-Schularick-Taylor Macrohistory Database R6",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1870,
+      "description": "Total bank loans to the non-financial private sector. Covers 18 advanced economies.",
+      "loader": {
+        "type": "jst"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "market_cap",
+      "name": "Stock market capitalization",
+      "category": "finance",
+      "priority": 7,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1975,
+      "description": "Market value of listed domestic companies.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "CM.MKT.LCAP.GD.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "jst_house_prices",
+      "name": "House prices",
+      "category": "finance",
+      "priority": 7.5,
+      "source": "Jorda-Schularick-Taylor Macrohistory Database R6",
+      "unit": "index, 1990 = 100",
+      "format": "decimal1",
+      "firstYear": 1870,
+      "description": "Nominal house price index rebased to 1990 = 100. Covers 18 advanced economies.",
+      "loader": {
+        "type": "jst"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "fdi_inflows",
+      "name": "FDI inflows",
+      "category": "finance",
+      "priority": 8,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1970,
+      "description": "Net inflows of foreign direct investment.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "BX.KLT.DINV.WD.GD.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "remittances",
+      "name": "Remittances received",
+      "category": "finance",
+      "priority": 9,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1970,
+      "description": "Personal remittances received.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "BX.TRF.PWKR.DT.GD.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "banking_crisis",
+      "name": "Banking crisis",
+      "category": "finance",
+      "priority": 10,
+      "source": "Jorda-Schularick-Taylor Macrohistory Database R6",
+      "unit": "",
+      "format": "label",
+      "firstYear": 1870,
+      "description": "Start of a systemic banking crisis. Covers 18 advanced economies.",
+      "loader": {
+        "type": "jst"
+      },
+      "lastYear": 2008
+    },
+    {
+      "id": "exports_gdp",
+      "name": "Exports",
+      "category": "trade",
+      "priority": 1,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Exports of goods and services.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NE.EXP.GNFS.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "imports_gdp",
+      "name": "Imports",
+      "category": "trade",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Imports of goods and services.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NE.IMP.GNFS.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "exports_usd",
+      "name": "Exports (US$)",
+      "category": "trade",
+      "priority": 0,
+      "source": "World Bank WDI (goods and services, 1960+); RICardo / Federico-Tena (goods only, 1800-1938)",
+      "unit": "current US$",
+      "format": "usd_compact",
+      "firstYear": 1800,
+      "description": "Total value of exports in current US dollars. Before 1939 the figures are goods only.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NE.EXP.GNFS.CD"
+      },
+      "extend": [
+        {
+          "type": "ricardo"
+        }
+      ],
+      "lastYear": 2025
+    },
+    {
+      "id": "imports_usd",
+      "name": "Imports (US$)",
+      "category": "trade",
+      "priority": 0.5,
+      "source": "World Bank WDI (goods and services, 1960+); RICardo / Federico-Tena (goods only, 1800-1938)",
+      "unit": "current US$",
+      "format": "usd_compact",
+      "firstYear": 1800,
+      "description": "Total value of imports in current US dollars. Before 1939 the figures are goods only.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NE.IMP.GNFS.CD"
+      },
+      "extend": [
+        {
+          "type": "ricardo"
+        }
+      ],
+      "lastYear": 2025
+    },
+    {
+      "id": "trade_balance",
+      "name": "Trade balance",
+      "category": "trade",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "current US$",
+      "format": "usd_compact",
+      "firstYear": 1960,
+      "description": "Exports minus imports of goods and services.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NE.RSB.GNFS.CD"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "current_account",
+      "name": "Current account balance",
+      "category": "trade",
+      "priority": 4,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Balance of trade, primary and secondary income.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "BN.CAB.XOKA.GD.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "tariff_rate",
+      "name": "Tariff rate (weighted mean)",
+      "category": "trade",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "%",
+      "format": "percent",
+      "firstYear": 1988,
+      "description": "Applied tariff rate, weighted mean, all products.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "TM.TAX.MRCH.WM.AR.ZS"
+      },
+      "lastYear": 2022
+    },
+    {
+      "id": "gov_debt",
+      "name": "Government debt",
+      "category": "government",
+      "priority": 1,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1970,
+      "description": "Central government debt.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "GC.DOD.TOTL.GD.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "jst_public_debt",
+      "name": "Public debt (long-run)",
+      "category": "government",
+      "priority": 1.5,
+      "source": "Jorda-Schularick-Taylor Macrohistory Database R6",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1870,
+      "description": "Public debt relative to GDP. Covers 18 advanced economies.",
+      "loader": {
+        "type": "jst"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "budget_balance",
+      "name": "Budget balance",
+      "category": "government",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1972,
+      "description": "Net lending (+) or net borrowing (-) of general government. Negative is a deficit.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "GC.NLD.TOTL.GD.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "tax_revenue",
+      "name": "Tax revenue",
+      "category": "government",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1972,
+      "description": "Compulsory transfers to central government.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "GC.TAX.TOTL.GD.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "gov_spending",
+      "name": "Government spending",
+      "category": "government",
+      "priority": 4,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1972,
+      "description": "Central government expense.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "GC.XPN.TOTL.GD.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "military_spending",
+      "name": "Military spending",
+      "category": "government",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Military expenditure (SIPRI data).",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "MS.MIL.XPND.GD.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "population",
+      "name": "Population",
+      "category": "demographics",
+      "priority": 1,
+      "source": "World Bank WDI (1960+); HYDE, Gapminder and UN WPP long-run estimates via Our World in Data (before 1960)",
+      "unit": "people",
+      "format": "compact",
+      "firstYear": 1600,
+      "description": "Midyear total population.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.POP.TOTL"
+      },
+      "extend": [
+        {
+          "type": "owid",
+          "slug": "population",
+          "column": "population_historical",
+          "beforeYear": 1960
+        }
+      ],
+      "lastYear": 2025
+    },
+    {
+      "id": "population_growth",
+      "name": "Population growth",
+      "category": "demographics",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "% per year",
+      "format": "percent",
+      "firstYear": 1961,
+      "description": "Annual population growth rate.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.POP.GROW"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "birth_rate",
+      "name": "Birth rate",
+      "category": "demographics",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "per 1,000 people",
+      "format": "decimal1",
+      "firstYear": 1960,
+      "description": "Crude birth rate.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.DYN.CBRT.IN"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "death_rate",
+      "name": "Death rate",
+      "category": "demographics",
+      "priority": 4,
+      "source": "World Bank WDI",
+      "unit": "per 1,000 people",
+      "format": "decimal1",
+      "firstYear": 1960,
+      "description": "Crude death rate.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.DYN.CDRT.IN"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "fertility_rate",
+      "name": "Fertility rate",
+      "category": "demographics",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "births per woman",
+      "format": "decimal2",
+      "firstYear": 1960,
+      "description": "Total fertility rate.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.DYN.TFRT.IN"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "urbanization",
+      "name": "Urbanization rate",
+      "category": "demographics",
+      "priority": 6,
+      "source": "World Bank WDI (1960+); HYDE 3.2 urban share estimates via Our World in Data (before 1960)",
+      "unit": "% of population",
+      "format": "percent",
+      "firstYear": 1600,
+      "description": "Share of people living in urban areas.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.URB.TOTL.IN.ZS"
+      },
+      "extend": [
+        {
+          "type": "owid",
+          "slug": "urbanization-last-500-years",
+          "column": "urbc_c_share",
+          "beforeYear": 1960
+        }
+      ],
+      "lastYear": 2025
+    },
+    {
+      "id": "age_0_14",
+      "name": "Population aged 0-14",
+      "category": "demographics",
+      "priority": 7,
+      "source": "World Bank WDI",
+      "unit": "% of population",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Age structure: children.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.POP.0014.TO.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "age_65_plus",
+      "name": "Population aged 65+",
+      "category": "demographics",
+      "priority": 8,
+      "source": "World Bank WDI",
+      "unit": "% of population",
+      "format": "percent",
+      "firstYear": 1960,
+      "description": "Age structure: older people.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.POP.65UP.TO.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "net_migration",
+      "name": "Net migration",
+      "category": "demographics",
+      "priority": 9,
+      "source": "World Bank WDI",
+      "unit": "people",
+      "format": "compact",
+      "firstYear": 1960,
+      "description": "Immigrants minus emigrants during the year.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SM.POP.NETM"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "population_density",
+      "name": "Population density",
+      "category": "demographics",
+      "priority": 10,
+      "source": "World Bank WDI",
+      "unit": "people per km²",
+      "format": "decimal1",
+      "firstYear": 1961,
+      "description": "People per square kilometer of land area.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "EN.POP.DNST"
+      },
+      "lastYear": 2023
+    },
+    {
+      "id": "life_expectancy",
+      "name": "Life expectancy",
+      "category": "health",
+      "priority": 1,
+      "source": "World Bank WDI (1960+); Riley, Zijdeman and UN WPP long-run estimates via Our World in Data (before 1960)",
+      "unit": "years",
+      "format": "decimal1",
+      "firstYear": 1603,
+      "description": "Life expectancy at birth.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.DYN.LE00.IN"
+      },
+      "extend": [
+        {
+          "type": "owid",
+          "slug": "life-expectancy",
+          "column": "life_expectancy_0",
+          "beforeYear": 1960
+        }
+      ],
+      "lastYear": 2024
+    },
+    {
+      "id": "infant_mortality",
+      "name": "Infant mortality",
+      "category": "health",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "per 1,000 live births",
+      "format": "decimal1",
+      "firstYear": 1960,
+      "description": "Deaths before age one.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SP.DYN.IMRT.IN"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "child_mortality",
+      "name": "Child mortality (under 5)",
+      "category": "health",
+      "priority": 2.5,
+      "source": "Gapminder and UN IGME via Our World in Data",
+      "unit": "% of children",
+      "format": "percent",
+      "firstYear": 1751,
+      "description": "Share of newborns who die before age five.",
+      "loader": {
+        "type": "owid",
+        "slug": "child-mortality",
+        "column": "child_mortality_rate"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "health_spending",
+      "name": "Health spending",
+      "category": "health",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 2000,
+      "description": "Current health expenditure.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SH.XPD.CHEX.GD.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "physicians",
+      "name": "Doctors",
+      "category": "health",
+      "priority": 4,
+      "source": "World Bank WDI",
+      "unit": "per 1,000 people",
+      "format": "decimal2",
+      "firstYear": 1960,
+      "description": "Physicians per 1,000 people.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SH.MED.PHYS.ZS"
+      },
+      "lastYear": 2023
+    },
+    {
+      "id": "vacc_measles",
+      "name": "Measles vaccination",
+      "category": "health",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "% of children 12-23 mo.",
+      "format": "percent",
+      "firstYear": 1980,
+      "description": "Children immunized against measles.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SH.IMM.MEAS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "vacc_dpt",
+      "name": "DPT vaccination",
+      "category": "health",
+      "priority": 6,
+      "source": "World Bank WDI",
+      "unit": "% of children 12-23 mo.",
+      "format": "percent",
+      "firstYear": 1980,
+      "description": "Children immunized against diphtheria, pertussis and tetanus.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SH.IMM.IDPT"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "energy_use",
+      "name": "Energy use per capita",
+      "category": "energy",
+      "priority": 1,
+      "source": "World Bank WDI",
+      "unit": "kg oil eq. per person",
+      "format": "integer",
+      "firstYear": 1990,
+      "description": "Primary energy use per person.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "EG.USE.PCAP.KG.OE"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "electricity_access",
+      "name": "Electricity access",
+      "category": "energy",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "% of population",
+      "format": "percent",
+      "firstYear": 1990,
+      "description": "Share of population with access to electricity.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "EG.ELC.ACCS.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "renewable_share",
+      "name": "Renewable energy share",
+      "category": "energy",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "% of final energy",
+      "format": "percent",
+      "firstYear": 1990,
+      "description": "Renewable share of total final energy consumption.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "EG.FEC.RNEW.ZS"
+      },
+      "lastYear": 2022
+    },
+    {
+      "id": "co2_per_capita",
+      "name": "CO2 emissions per capita",
+      "category": "energy",
+      "priority": 4,
+      "source": "Global Carbon Project via Our World in Data",
+      "unit": "t CO2 per person",
+      "format": "decimal2",
+      "firstYear": 1750,
+      "description": "Fossil fuel and industry CO2 emissions per person. Series start when a territory's recorded emissions begin.",
+      "loader": {
+        "type": "owid",
+        "slug": "co-emissions-per-capita",
+        "column": "emissions_total_per_capita"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "oil_production",
+      "name": "Oil production",
+      "category": "energy",
+      "priority": 4.5,
+      "source": "Energy Institute Statistical Review and The Shift Project via Our World in Data",
+      "unit": "TWh",
+      "format": "compact",
+      "firstYear": 1900,
+      "description": "Crude oil production measured as primary energy.",
+      "loader": {
+        "type": "owid",
+        "slug": "oil-production-by-country",
+        "column": "oil_production_twh"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "oil_rents",
+      "name": "Oil rents",
+      "category": "energy",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1970,
+      "description": "Value of crude oil production minus production costs. A proxy for oil production.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "NY.GDP.PETR.RT.ZS"
+      },
+      "lastYear": 2021
+    },
+    {
+      "id": "forest_area",
+      "name": "Forest area",
+      "category": "energy",
+      "priority": 6,
+      "source": "World Bank WDI",
+      "unit": "% of land area",
+      "format": "percent",
+      "firstYear": 1990,
+      "description": "Land under natural or planted forest.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "AG.LND.FRST.ZS"
+      },
+      "lastYear": 2023
+    },
+    {
+      "id": "literacy",
+      "name": "Literacy rate",
+      "category": "education",
+      "priority": 1,
+      "source": "World Bank WDI; historical estimates (van Zanden et al., UNESCO) via Our World in Data where WDI has no value",
+      "unit": "% of adults",
+      "format": "percent",
+      "firstYear": 1650,
+      "description": "Adults (15+) who can read and write.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SE.ADT.LITR.ZS"
+      },
+      "extend": [
+        {
+          "type": "owid",
+          "slug": "cross-country-literacy-rates",
+          "column": "literacy_rate"
+        }
+      ],
+      "lastYear": 2024
+    },
+    {
+      "id": "enroll_primary",
+      "name": "Primary school enrollment",
+      "category": "education",
+      "priority": 2,
+      "source": "World Bank WDI",
+      "unit": "% gross",
+      "format": "percent",
+      "firstYear": 1970,
+      "description": "Gross enrollment ratio. Can exceed 100%.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SE.PRM.ENRR"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "enroll_secondary",
+      "name": "Secondary school enrollment",
+      "category": "education",
+      "priority": 3,
+      "source": "World Bank WDI",
+      "unit": "% gross",
+      "format": "percent",
+      "firstYear": 1970,
+      "description": "Gross enrollment ratio. Can exceed 100%.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SE.SEC.ENRR"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "enroll_tertiary",
+      "name": "Tertiary enrollment",
+      "category": "education",
+      "priority": 4,
+      "source": "World Bank WDI",
+      "unit": "% gross",
+      "format": "percent",
+      "firstYear": 1970,
+      "description": "Gross enrollment ratio for universities and colleges.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "SE.TER.ENRR"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "mean_schooling",
+      "name": "Years of schooling",
+      "category": "education",
+      "priority": 4.5,
+      "source": "Lee and Lee (2016), Barro and Lee via Our World in Data",
+      "unit": "years",
+      "format": "decimal1",
+      "firstYear": 1870,
+      "description": "Average years of education of people aged 15 to 64.",
+      "loader": {
+        "type": "owid",
+        "slug": "mean-years-of-schooling-long-run",
+        "column": "mf_youth_and_adults__15_64_years__average_years_of_education"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "expected_schooling",
+      "name": "Expected years of schooling",
+      "category": "education",
+      "priority": 5,
+      "source": "World Bank WDI",
+      "unit": "years",
+      "format": "decimal1",
+      "firstYear": 2010,
+      "description": "Years of school a child can expect by age 18 (Human Capital Index).",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "HD.HCI.EYRS",
+        "wbSource": 63
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "rnd_spending",
+      "name": "R&D spending",
+      "category": "education",
+      "priority": 6,
+      "source": "World Bank WDI",
+      "unit": "% of GDP",
+      "format": "percent",
+      "firstYear": 1996,
+      "description": "Gross domestic expenditure on research and development.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "GB.XPD.RSDV.GD.ZS"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "internet_users",
+      "name": "Internet users",
+      "category": "education",
+      "priority": 7,
+      "source": "World Bank WDI",
+      "unit": "% of population",
+      "format": "percent",
+      "firstYear": 1990,
+      "description": "Individuals using the internet.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "IT.NET.USER.ZS"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "mobile_subs",
+      "name": "Mobile subscriptions",
+      "category": "education",
+      "priority": 8,
+      "source": "World Bank WDI",
+      "unit": "per 100 people",
+      "format": "decimal1",
+      "firstYear": 1960,
+      "description": "Mobile cellular subscriptions.",
+      "loader": {
+        "type": "worldbank",
+        "indicator": "IT.CEL.SETS.P2"
+      },
+      "lastYear": 2024
+    },
+    {
+      "id": "regime_type",
+      "name": "Regime type",
+      "category": "politics",
+      "priority": 1,
+      "source": "Polity5 (Center for Systemic Peace)",
+      "unit": "",
+      "format": "label",
+      "firstYear": 1776,
+      "description": "Democracy (polity score 6 to 10), anocracy (-5 to 5) or autocracy (-10 to -6), with special codes for transitions and collapse.",
+      "loader": {
+        "type": "polity"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "polity2",
+      "name": "Polity score",
+      "category": "politics",
+      "priority": 2,
+      "source": "Polity5 (Center for Systemic Peace)",
+      "unit": "-10 to +10",
+      "format": "integer",
+      "firstYear": 1776,
+      "description": "Combined polity score from -10 (full autocracy) to +10 (full democracy).",
+      "loader": {
+        "type": "polity"
+      },
+      "lastYear": 2020
+    },
+    {
+      "id": "democracy_vdem",
+      "name": "Democracy score (V-Dem)",
+      "category": "politics",
+      "priority": 3,
+      "source": "V-Dem electoral democracy index via Our World in Data",
+      "unit": "0 to 1",
+      "format": "decimal2",
+      "firstYear": 1789,
+      "description": "How far the ideal of electoral democracy is achieved. 1 is most democratic.",
+      "loader": {
+        "type": "owid",
+        "slug": "electoral-democracy-index",
+        "column": "electdem_vdem__estimate_best"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "wars",
+      "name": "Major wars and conflicts",
+      "category": "politics",
+      "priority": 4,
+      "source": "Brecke Conflict Catalog (1600-1815); Correlates of War (1816-2007, civil wars to 2014); UCDP/PRIO Armed Conflict Dataset (later years)",
+      "unit": "",
+      "format": "events",
+      "firstYear": 1600,
+      "description": "Wars the territory took part in that year: conflicts with 1,000+ recorded deaths (Brecke), wars with 1,000+ battle deaths (Correlates of War), or conflict-years with 1,000+ battle deaths (UCDP).",
+      "loader": {
+        "type": "wars"
+      },
+      "lastYear": 2025
+    },
+    {
+      "id": "colonial_status",
+      "name": "Colonial status / ruling power",
+      "category": "politics",
+      "priority": 5,
+      "source": "historical-basemaps (SUBJECTO field of the border snapshot)",
+      "unit": "",
+      "format": "label",
+      "firstYear": 1600,
+      "description": "Who ruled the territory in the nearest border snapshot. Derived from the map, so it follows the snapshot year.",
+      "loader": {
+        "type": "borders"
+      }
+    }
+  ]
+}
