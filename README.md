@@ -10,6 +10,8 @@ npm run dev        # http://localhost:5173
 npm run build      # static site in dist/
 ```
 
+`npm run build:artifact -- <folder>` builds a copy for hosts that limit file counts (such as a claude.ai Artifact): it packs the trade files into a few bundles and the flags into one file.
+
 Views are shareable through the URL hash, for example `#year=1914&color=exports_usd&sel=GBR`.
 
 ## How it fits together

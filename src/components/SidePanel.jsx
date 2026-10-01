@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { flagUrl } from '../data/flags.js';
 import MetricRow from './MetricRow.jsx';
 import TradeDetail from './TradeDetail.jsx';
 import { describeEntity, dataCodes } from '../data/entities.js';
@@ -51,7 +52,14 @@ export default function SidePanel({ config, allSeries, selection, year, snapshot
   const usesProxy = dataRows.some((r) => r.viaProxy);
   const proxyName = entity.proxy ? countries[entity.proxy]?.name : null;
   const coverage = coverageNote(eras, year, dataRows);
-  const flag = entity.iso2 ? `${import.meta.env.BASE_URL}flags/${entity.iso2.toLowerCase()}.png` : null;
+  const [flag, setFlag] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    flagUrl(entity.iso2).then((url) => alive && setFlag(url));
+    return () => {
+      alive = false;
+    };
+  }, [entity.iso2]);
   const successors = entity.successors.filter((c) => countries[c]);
 
   return (

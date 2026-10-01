@@ -22,7 +22,8 @@
     "data:sess": "node scripts/load-sess.mjs",
     "data:wars": "node scripts/load-wars.mjs",
     "data:imf": "node scripts/load-imf-trade.mjs",
-    "data:cow-trade": "node scripts/load-cow-trade.mjs"
+    "data:cow-trade": "node scripts/load-cow-trade.mjs",
+    "build:artifact": "node scripts/build-artifact.mjs"
   },
   "dependencies": {
     "globe.gl": "^2.46.2",

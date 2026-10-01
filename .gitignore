@@ -25,3 +25,6 @@ dist-ssr
 
 # Downloaded source datasets (re-fetched by the scripts)
 scripts/.cache
+
+# Packaged copy for artifact hosting
+artifact-build
