@@ -14,12 +14,13 @@
     "data:polity": "node scripts/load-polity.mjs",
     "data:jst": "node scripts/load-jst.mjs",
     "data:ricardo": "node scripts/load-ricardo.mjs",
-    "data:events": "node scripts/build-events.mjs",
     "data:borders": "node scripts/build-borders.mjs",
     "data:flags": "node scripts/fetch-flags.mjs",
     "data:coverage": "node scripts/update-coverage.mjs",
-    "data:all": "npm run data:worldbank && npm run data:owid && npm run data:maddison && npm run data:polity && npm run data:jst && npm run data:ricardo && npm run data:events && npm run data:borders && npm run data:flags && npm run data:atlas && npm run data:coverage",
-    "data:atlas": "node scripts/load-atlas.mjs"
+    "data:all": "npm run data:worldbank && npm run data:owid && npm run data:maddison && npm run data:polity && npm run data:jst && npm run data:ricardo && npm run data:wars && npm run data:borders && npm run data:flags && npm run data:atlas && npm run data:sess && npm run data:coverage",
+    "data:atlas": "node scripts/load-atlas.mjs",
+    "data:sess": "node scripts/load-sess.mjs",
+    "data:wars": "node scripts/load-wars.mjs"
   },
   "dependencies": {
     "globe.gl": "^2.46.2",

@@ -35,7 +35,7 @@ function regimeLabel(p) {
 
 const file = await cachedDownload(URL, 'polity5.xls');
 const rows = XLSX.utils.sheet_to_json(XLSX.readFile(file).Sheets.p5v2018);
-const { resolve } = await loadResolver();
+const { resolveDataset: resolve } = await loadResolver();
 const polity2 = {};
 const regime = {};
 const missing = new Set();

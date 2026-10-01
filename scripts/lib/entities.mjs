@@ -65,5 +65,16 @@ export async function loadResolver() {
     return null;
   }
 
-  return { resolve, countries, entities, normalize };
+  // For names that come from datasets rather than map labels: a dataset's
+  // "Ukraine" is the state, so modern country names win over the map-label
+  // aliases (where "Ukraine" on the 1920 map is only part of the country).
+  function resolveDataset(name, year) {
+    if (!name || !name.trim()) return null;
+    const n = normalize(name);
+    if (byName.has(n)) return byName.get(n);
+    const code = resolve(name, year);
+    return code && !code.startsWith('PART:') ? code : null;
+  }
+
+  return { resolve, resolveDataset, countries, entities, normalize };
 }

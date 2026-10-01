@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 import { loadTrade } from '../data/trade.js';
-import { formatValue } from '../data/format.js';
+import { formatValue, formatShort } from '../data/format.js';
+
+// Trade values are US$ unless the file says otherwise (Soviet statistics
+// are published in rubles and are shown as published).
+function money(v, currency) {
+  if (currency === 'rubles') return `${formatShort(v, 'compact')} rubles`;
+  return formatValue(v, 'usd_compact');
+}
 
 // Top 5 exports / imports by product and top partners for one territory-year.
 // Calls onAvailability(true|false) so the parent can hide an empty section.
@@ -31,8 +38,8 @@ export default function TradeDetail({ tradeIndex, codes, year, onAvailability })
     <div className="space-y-4 px-4 py-3">
       {data.exports?.length ? (
         <>
-          <Bars title="Top 5 exports" rows={data.exports} labelKey="product" color="#34d399" />
-          <Bars title="Top 5 imports" rows={data.imports} labelKey="product" color="#f59e0b" />
+          <Bars title="Top 5 exports" rows={data.exports} labelKey="product" color="#34d399" currency={data.currency} />
+          <Bars title="Top 5 imports" rows={data.imports} labelKey="product" color="#f59e0b" currency={data.currency} />
           {data.sources?.products && <div className="text-[10.5px] text-slate-500">Products: {data.sources.products}</div>}
         </>
       ) : (
@@ -40,8 +47,9 @@ export default function TradeDetail({ tradeIndex, codes, year, onAvailability })
       )}
       {data.partners ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1">
-          {data.partners.exports && <Bars title="Top export partners" rows={data.partners.exports} labelKey="name" color="#38bdf8" />}
-          {data.partners.imports && <Bars title="Top import partners" rows={data.partners.imports} labelKey="name" color="#a78bfa" />}
+          {data.partners.exports && <Bars title="Top export partners" rows={data.partners.exports} labelKey="name" color="#38bdf8" currency={data.currency} />}
+          {data.partners.imports && <Bars title="Top import partners" rows={data.partners.imports} labelKey="name" color="#a78bfa" currency={data.currency} />}
+          {data.partners.note && <Note inline>{data.partners.note}</Note>}
           {data.sources?.partners && <div className="text-[10.5px] text-slate-500">Partners: {data.sources.partners}</div>}
         </div>
       ) : (
@@ -51,7 +59,7 @@ export default function TradeDetail({ tradeIndex, codes, year, onAvailability })
   );
 }
 
-function Bars({ title, rows, labelKey, color }) {
+function Bars({ title, rows, labelKey, color, currency }) {
   const data = rows.map((r) => ({ ...r, label: r[labelKey] }));
   return (
     <div>
@@ -66,7 +74,7 @@ function Bars({ title, rows, labelKey, color }) {
               contentStyle={{ background: '#0a0f1a', border: '1px solid #2a3548', borderRadius: 8, fontSize: 11 }}
               labelStyle={{ color: '#e2e8f0' }}
               labelFormatter={(label, items) => (items?.[0]?.payload.code ? `${label} (${items[0].payload.code})` : label)}
-              formatter={(v, _n, p) => [`${v.toFixed(1)}% of total${p.payload.value ? ` · ${formatValue(p.payload.value, 'usd_compact')}` : ''}`, null]}
+              formatter={(v, _n, p) => [`${v.toFixed(1)}% of total${p.payload.value ? ` · ${money(p.payload.value, currency)}` : ''}`, null]}
               separator=""
             />
             <Bar dataKey="share" fill={color} radius={[0, 4, 4, 0]} isAnimationActive={false}>
@@ -76,7 +84,7 @@ function Bars({ title, rows, labelKey, color }) {
         </ResponsiveContainer>
       </div>
       <div className="mt-0.5 text-[10.5px] text-slate-500">
-        {rows.map((r) => (r.value ? `${r[labelKey]} ${formatValue(r.value, 'usd_compact')}` : null)).filter(Boolean).join(' · ')}
+        {rows.map((r) => (r.value ? `${r[labelKey]} ${money(r.value, currency)}` : null)).filter(Boolean).join(' · ')}
       </div>
     </div>
   );

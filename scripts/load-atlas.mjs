@@ -24,7 +24,8 @@ const NOT_PARTNERS = new Set(['USP', 'ANS']);
 function codeFor(iso3, year) {
   // Before 1992 Atlas files the USSR under Russia's code, built only from
   // partners' reports (the USSR did not report), so it badly understates
-  // Soviet trade. Leave those years out rather than show a wrong picture.
+  // Soviet trade. Soviet trade comes from official Soviet statistics
+  // instead (scripts/load-sess.mjs).
   if (iso3 === 'RUS' && year < 1992) return null;
   // Before reunification "Germany" is the Federal Republic (West Germany).
   if (iso3 === 'DEU' && year < 1991) return 'BRD';
@@ -91,8 +92,8 @@ function topFive(rows, key, nameOf, totalsByYear) {
   return out;
 }
 
-await clearTradeContent('products');
-await clearTradeContent('partners', (src) => !src.startsWith('RICardo'));
+await clearTradeContent('products', (src) => src.startsWith('Atlas'));
+await clearTradeContent('partners', (src) => src.startsWith('Atlas'));
 
 const countries = locationCountry.filter((c) => !NOT_PARTNERS.has(c.iso3Code) && c.iso3Code);
 let files = 0;

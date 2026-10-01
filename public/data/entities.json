@@ -678,6 +678,22 @@
       "successors": [
         "YEM"
       ]
+    },
+    "VENICE": {
+      "name": "Republic of Venice",
+      "successors": [
+        "ITA",
+        "HRV",
+        "SVN"
+      ],
+      "to": 1797
+    },
+    "GENOA": {
+      "name": "Republic of Genoa",
+      "successors": [
+        "ITA"
+      ],
+      "to": 1797
     }
   },
   "aliases": {
@@ -812,7 +828,7 @@
     "French Somaliland": "DJI",
     "French West Africa": "FR_WEST_AFRICA",
     "Gambia, The": "GMB",
-    "Genoa": "ITALIAN_STATES",
+    "Genoa": "GENOA",
     "German E. Africa (Tanganyika)": "TZA",
     "German Empire": "DEU",
     "German South-West Africa": "NAM",
@@ -1060,7 +1076,7 @@
     "United Provinces of the Río de la Plata": "UPRP",
     "United States of America": "USA",
     "Venetia": "ITALIAN_STATES",
-    "Venice": "ITALIAN_STATES",
+    "Venice": "VENICE",
     "Viceroyalty of Brazil": "BRA",
     "Viceroyalty of New Granada": "NEW_GRANADA",
     "Viceroyalty of New Spain": "NEW_SPAIN",

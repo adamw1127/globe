@@ -1333,14 +1333,13 @@
       "name": "Major wars and conflicts",
       "category": "politics",
       "priority": 4,
-      "source": "Curated list of major interstate and civil wars (see scripts/data/wars.json)",
+      "source": "Brecke Conflict Catalog (1600-1815); Correlates of War (1816-2007, civil wars to 2014); UCDP/PRIO Armed Conflict Dataset (later years)",
       "unit": "",
       "format": "events",
       "firstYear": 1600,
-      "description": "Major wars the territory took part in during the selected year.",
+      "description": "Wars the territory took part in that year: conflicts with 1,000+ recorded deaths (Brecke), wars with 1,000+ battle deaths (Correlates of War), or conflict-years with 1,000+ battle deaths (UCDP).",
       "loader": {
-        "type": "events",
-        "file": "scripts/data/wars.json"
+        "type": "wars"
       },
       "lastYear": 2025
     },

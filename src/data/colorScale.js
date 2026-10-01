@@ -1,5 +1,12 @@
 import { formatLegend } from './format.js';
 
+// "a to b", or just "a" when both ends round to the same label.
+const range = (lo, hi, format) => {
+  const a = formatLegend(lo, format);
+  const b = formatLegend(hi, format);
+  return a === b ? a : `${a} to ${b}`;
+};
+
 export const MISSING_COLOR = '#2b3240';
 const SEQUENTIAL = ['#173a5e', '#1b5a85', '#1f7aa3', '#2a9d8f', '#5bbf7a', '#a6d66a', '#f1e05a'];
 const NEGATIVE = ['#b8323f', '#dc6b5b', '#f0a58b'];
@@ -34,8 +41,8 @@ export function buildScale(values, format) {
       return POSITIVE[i === -1 ? posCuts.length : i];
     };
     const legend = [
-      ...[min, ...negCuts].map((lo, i, arr) => ({ color: NEGATIVE[i], label: `${formatLegend(lo, format)} to ${formatLegend(arr[i + 1] ?? 0, format)}` })),
-      ...[0, ...posCuts].map((lo, i, arr) => ({ color: POSITIVE[i], label: `${formatLegend(lo, format)} to ${formatLegend(arr[i + 1] ?? max, format)}` })),
+      ...[min, ...negCuts].map((lo, i, arr) => ({ color: NEGATIVE[i], label: range(lo, arr[i + 1] ?? 0, format) })),
+      ...[0, ...posCuts].map((lo, i, arr) => ({ color: POSITIVE[i], label: range(lo, arr[i + 1] ?? max, format) })),
     ];
     return { color, legend };
   }
@@ -49,7 +56,7 @@ export function buildScale(values, format) {
   };
   const legend = [min, ...cuts].map((lo, i, arr) => ({
     color: palette[i],
-    label: `${formatLegend(lo, format)} to ${formatLegend(arr[i + 1] ?? max, format)}`,
+    label: range(lo, arr[i + 1] ?? max, format),
   }));
   return { color, legend };
 }

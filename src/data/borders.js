@@ -13,11 +13,13 @@ export async function loadBorderIndex() {
   return { snapshots: index.snapshots, source: index.source };
 }
 
-// Closest snapshot to the year. Ties go to the earlier snapshot.
+// The latest snapshot at or before the year (the first snapshot for years
+// before it). A later map could show states that did not exist yet, such as
+// post-Soviet borders in 1980; an earlier one can only lag behind changes.
 export function nearestSnapshot(snapshots, year) {
   let best = snapshots[0];
   for (const s of snapshots) {
-    if (Math.abs(s - year) < Math.abs(best - year)) best = s;
+    if (s <= year) best = s;
   }
   return best;
 }

@@ -65,7 +65,7 @@ Borders come from [historical-basemaps](https://github.com/aourednik/historical-
 - `ENTITY`: the data entity code (an ISO3 code, a historical key, `PART:<ISO3>`, or null)
 - `RULER`: the ruling power when the territory is subject to another (used for "Colonial status")
 
-The app shows the snapshot closest to the selected year and tells the user which one.
+The app shows the latest snapshot at or before the selected year and tells the user which one. Using a later snapshot would show states before they existed (for example post-Soviet borders in 1980), so an earlier map is used even when a later one is closer.
 
 `public/data/entities.json` has two parts:
 
@@ -90,16 +90,17 @@ How data attaches to a territory:
 | `data:polity` | Polity5 (Center for Systemic Peace) | Polity score and regime type, 1776 to 2018 (USA to 2020) |
 | `data:jst` | Jorda-Schularick-Taylor Macrohistory R6 | Interest rates, house prices, bank credit, public debt, wages, banking crises: 18 economies, 1870 to 2020 |
 | `data:ricardo` | RICardo (Sciences Po medialab) | Total exports and imports in US$ (Federico-Tena, 1800 to 1938) and top 5 partners |
-| `data:events` | `scripts/data/wars.json` | 86 major wars, 1600 to today (hand-curated, edit freely) |
+| `data:wars` | Brecke Conflict Catalog, Correlates of War, UCDP/PRIO | Wars each territory took part in, 1600 to 2025 (see below) |
 | `data:borders` | historical-basemaps | 19 snapshots, 1600 to 2010 |
 | `data:flags` | flagcdn.com | Flag images, saved locally |
 | `data:atlas` | Atlas of Economic Complexity (Harvard Growth Lab) API | Top 5 products and partners, goods only, 1962 to 2024 |
+| `data:sess` | Official Soviet trade statistics via SESS (Hokkaido University) | USSR partners and commodity groups, 1946 to 1989 |
 | `data:coverage` | All of the above | Writes `firstYear`/`lastYear` and `timeline.json` |
 
 Coverage in the registry is measured from the files, not assumed. Some notes from doing that:
 
 - **Maddison:** the official workbook is on Dataverse, which blocks scripted downloads. The loader uses `scripts/.cache/mpd2023_web.xlsx` when present (download it by hand from the Maddison site) and otherwise reads Our World in Data's copy of the same 2023 release.
-- **Timeline:** a year becomes a slider stop if it is a border snapshot or at least 20 territories have a numeric value. That gives 1600, 1650, 1700, 1710 and so on through the 1700s, then every year from 1789 when V-Dem begins.
+- **Timeline:** a year becomes a slider stop if it is a border snapshot or at least 10 territories have some value (a number, a label or an event such as a war). With the current sources every year from 1600 qualifies (Maddison alone has annual figures for about ten countries), so the slider moves year by year. If a source is removed and early years thin out, the slider goes back to snapping between the years that have data.
 
 ## Trade data
 
@@ -107,14 +108,27 @@ There is no mock or generated data anywhere in the app. Each territory-year trad
 
 - **1800 to 1938: RICardo.** Partners come from bilateral flows. Shares are computed within one source table per territory-year, so currencies are never mixed. RICardo has no product breakdown.
 - **1962 to 2024: Atlas of Economic Complexity.** Products are SITC rev. 2 four-digit codes for 1962 to 1994 and HS 1992 four-digit codes from 1995 (the code shows in the chart tooltip). Shares are of total goods trade; services are excluded.
-- **1939 to 1961:** no source covers these years, so the panel says trade detail is not available.
+- **USSR, 1946 to 1989: official Soviet statistics** (*Vneshnyaya torgovlya SSSR*, the foreign-trade yearbooks), as digitized in the Soviet and Russian Economic Statistical Series at Hokkaido University. Partners are by country; products are the broad Soviet commodity groups. Values are shown in rubles, as published. Part of Soviet exports was never attributed to a named country (widely believed to be mostly arms). A year's top 5 partners is only shown when that unattributed share is smaller than the fifth partner's share, so no hidden country could outrank one shown; otherwise the panel says so and gives the share. The source has no figures for 1990 and 1991.
+- **1939 to 1961 (other territories):** no source covers these years, so the panel says trade detail is not available.
 
 Two Atlas series are handled specially for accuracy:
 
-- **Russia before 1992:** Atlas files Soviet trade under Russia's code, built only from partners' reports, so it understates Soviet trade several times over. These years are left out.
+- **Russia before 1992:** Atlas files Soviet trade under Russia's code, built only from partners' reports. That misses most trade with other socialist economies and understates Soviet trade several times over, so those years are not used; Soviet trade comes from the official statistics above.
 - **Germany before 1991:** this is West Germany, so it is attached to `BRD`.
 
+## Wars
+
+`npm run data:wars` builds the `wars` metric from three datasets, with no hand-written entries:
+
+- **1600 to 1815: Brecke, Conflict Catalog** (Georgia Tech). Conflicts with at least 1,000 recorded deaths, plus campaigns the catalog names as part of such a war. Parties come from the catalog's conflict names (for example "Poland-Sweden, 1600-11"). The Thirty Years' War, French Revolutionary Wars and Napoleonic Wars appear in the catalog both as an umbrella entry without parties and as component campaigns with parties and dates; the components are used.
+- **1816 to 2007 (civil wars to 2014): Correlates of War** inter-state, extra-state and intra-state war data (1,000+ battle deaths).
+- **Later years: UCDP/PRIO Armed Conflict Dataset**, conflict-years at war intensity (1,000+ battle deaths that year). States that sent troops in support are marked "(supporting party)".
+
+Rebel groups and polities without a data entity are skipped; the script prints them so the mapping can be extended.
+
 ## Known gaps
+
+- **Soviet trade 1990 and 1991:** the official yearbook series ends in 1989, so the trade section has no figures for the USSR's last two years.
 
 - **Sovereign credit rating** is not included. There is no free, openly licensed historical source for it.
 - **Wages:** the World Bank has no comparable wage series. The registry uses wage and salaried workers (% of employment) and JST nominal wage growth (18 economies).

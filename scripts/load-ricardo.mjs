@@ -53,7 +53,7 @@ const SKIP = new Set(['Somaliland Republic (British Somaliland)', 'Cyrenaica', '
   'British Oceania', 'German Oceania', 'Leeward Is.', 'French India', 'Portuguese India', 'Sabah (North Borneo)', 'Sarawak',
   'Newfoundland and Labrador (Newfoundland)', 'Kenya (British East Africa Protectorate) & Uganda', 'Lebanon & Syria', 'Ruanda-Urundi']);
 
-const { resolve } = await loadResolver();
+const { resolveDataset: resolve } = await loadResolver();
 function codeFor(ric, year) {
   if (!ric || SKIP.has(ric)) return null;
   if (FIXED[ric]) return FIXED[ric](year);

@@ -94,7 +94,7 @@ export default function SidePanel({ config, allSeries, selection, year, snapshot
       <div className="scroll-thin min-h-0 flex-1 overflow-y-auto pb-6">
         {selection.fromMap && (
           <div className="px-4 pt-3 text-[11px] text-slate-500">
-            Borders from the {snapshotYear} snapshot{snapshotYear !== year ? `, the closest to ${year}` : ''}. Historical borders are approximate.
+            Borders from the {snapshotYear} snapshot{snapshotYear !== year ? `, the latest map before ${year}` : ''}. Historical borders are approximate.
           </div>
         )}
         {coverage && hasData && <div className="mx-4 mt-3 rounded-lg bg-sky-400/5 px-3 py-2 text-[12px] text-sky-200/90 ring-1 ring-sky-400/15">{coverage}</div>}
@@ -182,7 +182,8 @@ function coverageNote(eras, year, rows) {
   const rule = eras.coverageNotes?.find((n) => year < n.before);
   const numeric = rows.filter((r) => isNumeric(r.metric));
   if (numeric.length > 0 && numeric.length <= 3) {
-    const names = numeric.map((r) => r.metric.name.replace(/\s*\(.*\)$/, '').toLowerCase());
+    // Lowercase the first letter for the sentence, but keep acronyms (GDP).
+    const names = numeric.map((r) => r.metric.name.replace(/\s*\(.*\)$/, '').replace(/^([A-Z])(?=[a-z])/, (c) => c.toLowerCase()));
     const list = names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
     return `Only ${list} ${names.length === 1 ? 'is' : 'are'} recorded for this year.${rule ? ` ${rule.text}` : ''}`;
   }
