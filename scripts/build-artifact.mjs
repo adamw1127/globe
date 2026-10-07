@@ -1,13 +1,13 @@
 // Builds a self-contained copy of the site for hosting as a claude.ai
 // Artifact (or any static host that limits file counts): the ~20,000
-// per-territory trade files are packed into a few bundles and the flags into
+// per-territory trade and entity files are packed into a few bundles and the flags into
 // one JSON of data URIs. The app reads the bundles when they exist.
 //
 //   node scripts/build-artifact.mjs <output dir>
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { ROOT, readJSON, writeJSON } from './lib/util.mjs';
+import { ROOT, writeJSON } from './lib/util.mjs';
 
 const out = path.resolve(process.argv[2] ?? path.join(ROOT, 'artifact-build'));
 const PACK_BYTES = 6 * 1024 * 1024;
@@ -45,35 +45,36 @@ for (const f of ['countries.json', 'entities.json', 'timeline.json']) await fs.c
 await fs.mkdir(path.join(out, 'data/trade'), { recursive: true });
 await fs.copyFile(path.join(dist, 'data/trade/index.json'), path.join(out, 'data/trade/index.json'));
 
-// Trade bundles: { CODE: { year: file } }, split into ~6 MB packs.
+// Bundles: the per-territory trade and entity files, packed into ~6 MB
+// files of { "original/path.json": content }. data/packs/map.json maps each
+// original path to its bundle number, which src/data/fetchJSON.js reads.
+const packed = [];
 const tradeDir = path.join(dist, 'data/trade');
-const codes = (await fs.readdir(tradeDir)).filter((c) => c !== 'index.json').sort();
+for (const code of (await fs.readdir(tradeDir)).filter((c) => c !== 'index.json').sort()) {
+  for (const f of (await fs.readdir(path.join(tradeDir, code))).sort()) packed.push(`data/trade/${code}/${f}`);
+}
+for (const f of (await fs.readdir(path.join(dist, 'data/entity'))).sort()) packed.push(`data/entity/${f}`);
+
 const map = {};
 let pack = {};
 let packBytes = 0;
 let packNo = 0;
 const flush = async () => {
   if (!Object.keys(pack).length) return;
-  await writeJSON(path.join(out, 'data/trade-packs', `${packNo}.json`), pack);
+  await writeJSON(path.join(out, 'data/packs', `${packNo}.json`), pack);
   packNo++;
   pack = {};
   packBytes = 0;
 };
-for (const code of codes) {
-  const years = {};
-  let bytes = 0;
-  for (const f of await fs.readdir(path.join(tradeDir, code))) {
-    const text = await fs.readFile(path.join(tradeDir, code, f), 'utf8');
-    years[f.replace('.json', '')] = JSON.parse(text);
-    bytes += text.length;
-  }
-  if (packBytes + bytes > PACK_BYTES) await flush();
-  pack[code] = years;
-  packBytes += bytes;
-  map[code] = packNo;
+for (const rel of packed) {
+  const text = await fs.readFile(path.join(dist, rel), 'utf8');
+  if (packBytes + text.length > PACK_BYTES) await flush();
+  pack[rel] = JSON.parse(text);
+  packBytes += text.length;
+  map[rel] = packNo;
 }
 await flush();
-await writeJSON(path.join(out, 'data/trade-packs/map.json'), map);
+await writeJSON(path.join(out, 'data/packs/map.json'), map);
 
 // Flags as data URIs in one file.
 const flags = {};
@@ -96,4 +97,4 @@ await walk(out);
 const total = files.reduce((a, f) => a + f.size, 0);
 const largest = files.reduce((a, f) => (f.size > a.size ? f : a));
 await writeJSON(path.join(out, '..', 'artifact-files.json'), files.map((f) => f.p).filter((p) => p !== 'index.html'), true);
-console.log(`artifact build: ${files.length} files, ${(total / 1e6).toFixed(1)} MB, largest ${largest.p} ${(largest.size / 1e6).toFixed(1)} MB, ${packNo} trade packs`);
+console.log(`artifact build: ${files.length} files, ${(total / 1e6).toFixed(1)} MB, largest ${largest.p} ${(largest.size / 1e6).toFixed(1)} MB, ${packNo} packs`);

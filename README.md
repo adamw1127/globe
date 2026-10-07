@@ -1,6 +1,6 @@
 # Economic Globe
 
-An interactive 3D globe of economic, financial and social data from 1600 to today. Click a territory, pick a year, and the side panel shows every metric that has a real recorded value for that place and year, each with a trend chart. Borders change with the year.
+An interactive 3D globe of economic, financial and social data from 1600 to today. Click a territory (or search for one), pick a year, and the left panel shows every metric that has a real recorded value for that place and year, each with a trend chart that opens full size. The right panel lists notable events for the place and period and has a chat that answers questions about the data. Borders change with the year.
 
 React + Vite, Globe.gl (three.js), Recharts and Tailwind. All data is static JSON in `public/`. The app makes no API calls at runtime.
 
@@ -10,7 +10,7 @@ npm run dev        # http://localhost:5173
 npm run build      # static site in dist/
 ```
 
-`npm run build:artifact -- <folder>` builds a copy for hosts that limit file counts (such as a claude.ai Artifact): it packs the trade files into a few bundles and the flags into one file.
+`npm run build:artifact -- <folder>` builds a copy for hosts that limit file counts (such as a claude.ai Artifact): it packs the trade and per-territory files into a few bundles (`data/packs/`) and the flags into one file.
 
 Views are shareable through the URL hash, for example `#year=1914&color=exports_usd&sel=GBR`.
 
@@ -25,7 +25,9 @@ Views are shareable through the URL hash, for example `#year=1914&color=exports_
 | `public/data/entities.json` | Maps map territories to data entities (see below). |
 | `public/data/borders/` | Simplified border snapshots plus `index.json`. |
 | `public/data/trade/<CODE>/<year>.json` | Top exports, imports and partners for one territory-year. |
-| `public/data/timeline.json` | Slider stops, computed from the data. |
+| `public/data/entity/<CODE>.json` | Every metric for one territory, for the panels and the chat. |
+| `public/data/timeline.json` | Slider stops, the first year each metric can color the map, and years it would leave the map blank. |
+| `scripts/lib/timeline.mjs` | Year rules shared by the scripts and the app (benchmarks, latest-value fill). |
 | `src/data/borders.js` | Border loader. The only code that knows where borders come from. |
 
 ### Adding a metric
@@ -56,9 +58,14 @@ Formats: `usd`, `usd_compact`, `percent`, `compact`, `integer`, `decimal1`, `dec
 
 ### Display rules
 
-- A metric appears only when it has a value for that exact territory and year. A section with no such metrics is hidden.
+- **Benchmark years before 1820.** The slider stops at 1600, 1650, 1700, 1750, 1800 and 1820, then every year. Each benchmark stands for its span (1700 means 1700 to 1749): a figure is the first value inside the span, and events cover the whole span. Set in `eras.json` (`benchmarks`, `annualFrom`).
+- **Latest value for ended series.** When a series has ended (for example it stops in 2021 and you view 2023), the panel and map use its last value if it is at most 10 years old, marked with the year it is from. Metrics with `"carryForward": false` (wars, banking crises, colonial status) never do this.
+- **Slider blocker.** The slider skips years in which no territory has data for the "Color by" metric, and shades the blocked stretch at the start.
+- A metric appears only when it has a value for that territory in that year or span. Sections start collapsed under a card of headline figures (`summaryMetrics` in `metrics.json`).
+- `badge` on a metric says when to use it over a look-alike (GDP vs. long-run GDP, for example); `sourceUrl` links each metric to its source.
 - The coverage note adapts to the era (`coverageNotes` in `eras.json`) and names the metrics when only a few exist.
-- Gray on the map means no data for the selected metric and year.
+- Colors run from warm sand (small) through blues to dark green (large); measures that go negative use oranges below zero. Dark gray means no data.
+- Notable events come only from the datasets (wars, regime changes, banking crises, inflation above 40%, GDP falls of 8% or more). The AI summary and the chat use Claude through the claude.ai Artifact `sample` capability, so they work only on the claude.ai copy of the page; the chat reads the globe's data through tools and says when it is using general knowledge.
 
 ## Borders and historical entities
 

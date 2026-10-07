@@ -3,7 +3,6 @@ import Globe from 'globe.gl';
 import { MeshPhongMaterial, Color } from 'three';
 
 const BASE_ALT = 0.006;
-const HOVER_ALT = 0.02;
 const SELECT_ALT = 0.03;
 
 // Thin React wrapper around globe.gl. Polygons come from the current border
@@ -23,8 +22,8 @@ export default function GlobeView({ features, colorOf, selectedKey, onSelect, fe
       .atmosphereColor('#4aa3ff')
       .atmosphereAltitude(0.18)
       .globeMaterial(new MeshPhongMaterial({ color: new Color('#0b1a2e'), emissive: new Color('#050b16'), shininess: 8 }))
-      .polygonsTransitionDuration(250)
-      .polygonCapCurvatureResolution(5)
+      .polygonsTransitionDuration(0)
+      .polygonCapCurvatureResolution(8)
       .polygonSideColor(() => 'rgba(10, 15, 26, 0.6)')
       .polygonStrokeColor(() => 'rgba(5, 7, 13, 0.85)')
       .polygonAltitude((f) => altitudeFor(f))
@@ -33,16 +32,15 @@ export default function GlobeView({ features, colorOf, selectedKey, onSelect, fe
       .onPolygonHover((f) => {
         hoverRef.current = f;
         el.style.cursor = f ? 'pointer' : 'grab';
-        refresh();
+        // Hover only changes cap colors: re-raising polygons rebuilds geometry.
+        globe.polygonCapColor(globe.polygonCapColor());
       })
       .onPolygonClick((f, _e, coords) => props.current.onSelect(f, coords))
       .onGlobeClick(() => props.current.onSelect(null));
 
     function altitudeFor(f) {
       const { selectedKey: sel, featureKey: key } = props.current;
-      if (sel && key(f) === sel) return SELECT_ALT;
-      if (f === hoverRef.current) return HOVER_ALT;
-      return BASE_ALT;
+      return sel && key(f) === sel ? SELECT_ALT : BASE_ALT;
     }
     function capColor(f) {
       const { selectedKey: sel, featureKey: key, colorOf: color } = props.current;
@@ -93,8 +91,12 @@ export default function GlobeView({ features, colorOf, selectedKey, onSelect, fe
   }, [features]);
 
   useEffect(() => {
+    globeRef.current?.globe.polygonCapColor(globeRef.current.globe.polygonCapColor());
+  }, [colorOf]);
+
+  useEffect(() => {
     globeRef.current?.refresh();
-  }, [colorOf, selectedKey]);
+  }, [selectedKey]);
 
   useEffect(() => {
     const g = globeRef.current;

@@ -1,5 +1,5 @@
 {
-  "_comment": "Metrics registry. The UI renders entirely from this file. Each metric needs a data file at public/data/metrics/<id>.json shaped { entityCode: { year: value } }. firstYear/lastYear are written by scripts/update-coverage.mjs from the real data.",
+  "_comment": "Metrics registry. The UI renders entirely from this file. Each metric needs a data file at public/data/metrics/<id>.json shaped { entityCode: { year: value } }. firstYear/lastYear are written by scripts/update-coverage.mjs from the real data. Optional fields: badge (one line on when to use this measure), sourceUrl, carryForward (false = never fill a year with an earlier value). summaryMetrics: the headline figures shown first in the side panel (the first six with data are used).",
   "formats": [
     "usd",
     "usd_compact",
@@ -26,7 +26,9 @@
         "type": "worldbank",
         "indicator": "NY.GDP.MKTP.CD"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Current dollars, 1960 on. Use for size of the economy today.",
+      "sourceUrl": "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD"
     },
     {
       "id": "gdp_per_capita",
@@ -42,7 +44,9 @@
         "type": "worldbank",
         "indicator": "NY.GDP.PCAP.CD"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Current dollars, 1960 on. Use for income per person in recent decades.",
+      "sourceUrl": "https://data.worldbank.org/indicator/NY.GDP.PCAP.CD"
     },
     {
       "id": "maddison_gdppc",
@@ -57,7 +61,9 @@
       "loader": {
         "type": "maddison"
       },
-      "lastYear": 2022
+      "lastYear": 2022,
+      "badge": "Inflation- and price-adjusted. Use to compare income across centuries.",
+      "sourceUrl": "https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2023"
     },
     {
       "id": "maddison_gdp",
@@ -72,7 +78,9 @@
       "loader": {
         "type": "maddison"
       },
-      "lastYear": 2022
+      "lastYear": 2022,
+      "badge": "Inflation- and price-adjusted. Use to compare economy size across centuries.",
+      "sourceUrl": "https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2023"
     },
     {
       "id": "gdp_growth",
@@ -88,7 +96,8 @@
         "type": "worldbank",
         "indicator": "NY.GDP.MKTP.KD.ZG"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG"
     },
     {
       "id": "inflation",
@@ -104,7 +113,8 @@
         "type": "worldbank",
         "indicator": "FP.CPI.TOTL.ZG"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG"
     },
     {
       "id": "unemployment",
@@ -120,7 +130,8 @@
         "type": "worldbank",
         "indicator": "SL.UEM.TOTL.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS"
     },
     {
       "id": "agriculture_share",
@@ -136,7 +147,8 @@
         "type": "worldbank",
         "indicator": "NV.AGR.TOTL.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/NV.AGR.TOTL.ZS"
     },
     {
       "id": "industry_share",
@@ -152,7 +164,8 @@
         "type": "worldbank",
         "indicator": "NV.IND.TOTL.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/NV.IND.TOTL.ZS"
     },
     {
       "id": "services_share",
@@ -168,7 +181,8 @@
         "type": "worldbank",
         "indicator": "NV.SRV.TOTL.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/NV.SRV.TOTL.ZS"
     },
     {
       "id": "labor_force_participation",
@@ -184,7 +198,8 @@
         "type": "worldbank",
         "indicator": "SL.TLF.CACT.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SL.TLF.CACT.ZS"
     },
     {
       "id": "wage_workers",
@@ -200,7 +215,8 @@
         "type": "worldbank",
         "indicator": "SL.EMP.WORK.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SL.EMP.WORK.ZS"
     },
     {
       "id": "jst_wage_growth",
@@ -215,7 +231,8 @@
       "loader": {
         "type": "jst"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "sourceUrl": "https://www.macrohistory.net/database/"
     },
     {
       "id": "poverty_rate",
@@ -231,7 +248,8 @@
         "type": "worldbank",
         "indicator": "SI.POV.DDAY"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SI.POV.DDAY"
     },
     {
       "id": "gini",
@@ -247,7 +265,8 @@
         "type": "worldbank",
         "indicator": "SI.POV.GINI"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SI.POV.GINI"
     },
     {
       "id": "investment",
@@ -263,7 +282,8 @@
         "type": "worldbank",
         "indicator": "NE.GDI.TOTL.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/NE.GDI.TOTL.ZS"
     },
     {
       "id": "savings",
@@ -279,7 +299,8 @@
         "type": "worldbank",
         "indicator": "NY.GNS.ICTR.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/NY.GNS.ICTR.ZS"
     },
     {
       "id": "lending_rate",
@@ -295,7 +316,9 @@
         "type": "worldbank",
         "indicator": "FR.INR.LEND"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "What banks charge borrowers.",
+      "sourceUrl": "https://data.worldbank.org/indicator/FR.INR.LEND"
     },
     {
       "id": "deposit_rate",
@@ -311,7 +334,9 @@
         "type": "worldbank",
         "indicator": "FR.INR.DPST"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "What banks pay savers.",
+      "sourceUrl": "https://data.worldbank.org/indicator/FR.INR.DPST"
     },
     {
       "id": "real_interest_rate",
@@ -327,7 +352,9 @@
         "type": "worldbank",
         "indicator": "FR.INR.RINR"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Lending rate minus inflation.",
+      "sourceUrl": "https://data.worldbank.org/indicator/FR.INR.RINR"
     },
     {
       "id": "jst_ltrate",
@@ -342,7 +369,9 @@
       "loader": {
         "type": "jst"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "badge": "Government bond yield. 18 economies, 1870 on.",
+      "sourceUrl": "https://www.macrohistory.net/database/"
     },
     {
       "id": "jst_stir",
@@ -357,7 +386,9 @@
       "loader": {
         "type": "jst"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "badge": "Money-market rate. 18 economies, 1870 on.",
+      "sourceUrl": "https://www.macrohistory.net/database/"
     },
     {
       "id": "exchange_rate",
@@ -373,7 +404,8 @@
         "type": "worldbank",
         "indicator": "PA.NUS.FCRF"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/PA.NUS.FCRF"
     },
     {
       "id": "broad_money",
@@ -389,7 +421,8 @@
         "type": "worldbank",
         "indicator": "FM.LBL.BMNY.GD.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/FM.LBL.BMNY.GD.ZS"
     },
     {
       "id": "private_credit",
@@ -405,7 +438,9 @@
         "type": "worldbank",
         "indicator": "FS.AST.PRVT.GD.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "All domestic credit, 1960 on.",
+      "sourceUrl": "https://data.worldbank.org/indicator/FS.AST.PRVT.GD.ZS"
     },
     {
       "id": "jst_bank_credit",
@@ -420,7 +455,9 @@
       "loader": {
         "type": "jst"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "badge": "Bank loans only. 18 economies, 1870 on.",
+      "sourceUrl": "https://www.macrohistory.net/database/"
     },
     {
       "id": "market_cap",
@@ -436,7 +473,8 @@
         "type": "worldbank",
         "indicator": "CM.MKT.LCAP.GD.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/CM.MKT.LCAP.GD.ZS"
     },
     {
       "id": "jst_house_prices",
@@ -451,7 +489,8 @@
       "loader": {
         "type": "jst"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "sourceUrl": "https://www.macrohistory.net/database/"
     },
     {
       "id": "fdi_inflows",
@@ -467,7 +506,8 @@
         "type": "worldbank",
         "indicator": "BX.KLT.DINV.WD.GD.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/BX.KLT.DINV.WD.GD.ZS"
     },
     {
       "id": "remittances",
@@ -483,7 +523,8 @@
         "type": "worldbank",
         "indicator": "BX.TRF.PWKR.DT.GD.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/BX.TRF.PWKR.DT.GD.ZS"
     },
     {
       "id": "banking_crisis",
@@ -498,7 +539,9 @@
       "loader": {
         "type": "jst"
       },
-      "lastYear": 2008
+      "lastYear": 2008,
+      "sourceUrl": "https://www.macrohistory.net/database/",
+      "carryForward": false
     },
     {
       "id": "exports_gdp",
@@ -514,7 +557,9 @@
         "type": "worldbank",
         "indicator": "NE.EXP.GNFS.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Share of the economy. Use to compare openness.",
+      "sourceUrl": "https://data.worldbank.org/indicator/NE.EXP.GNFS.ZS"
     },
     {
       "id": "imports_gdp",
@@ -530,7 +575,9 @@
         "type": "worldbank",
         "indicator": "NE.IMP.GNFS.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Share of the economy. Use to compare openness.",
+      "sourceUrl": "https://data.worldbank.org/indicator/NE.IMP.GNFS.ZS"
     },
     {
       "id": "exports_usd",
@@ -551,7 +598,9 @@
           "type": "ricardo"
         }
       ],
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Dollar value. Goods only before 1939.",
+      "sourceUrl": "https://data.worldbank.org/indicator/NE.EXP.GNFS.CD"
     },
     {
       "id": "imports_usd",
@@ -572,7 +621,9 @@
           "type": "ricardo"
         }
       ],
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Dollar value. Goods only before 1939.",
+      "sourceUrl": "https://data.worldbank.org/indicator/NE.IMP.GNFS.CD"
     },
     {
       "id": "trade_balance",
@@ -588,7 +639,8 @@
         "type": "worldbank",
         "indicator": "NE.RSB.GNFS.CD"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/NE.RSB.GNFS.CD"
     },
     {
       "id": "current_account",
@@ -604,7 +656,8 @@
         "type": "worldbank",
         "indicator": "BN.CAB.XOKA.GD.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/BN.CAB.XOKA.GD.ZS"
     },
     {
       "id": "tariff_rate",
@@ -620,7 +673,8 @@
         "type": "worldbank",
         "indicator": "TM.TAX.MRCH.WM.AR.ZS"
       },
-      "lastYear": 2022
+      "lastYear": 2022,
+      "sourceUrl": "https://data.worldbank.org/indicator/TM.TAX.MRCH.WM.AR.ZS"
     },
     {
       "id": "gov_debt",
@@ -636,7 +690,9 @@
         "type": "worldbank",
         "indicator": "GC.DOD.TOTL.GD.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "badge": "Central government, 1970 on, many countries.",
+      "sourceUrl": "https://data.worldbank.org/indicator/GC.DOD.TOTL.GD.ZS"
     },
     {
       "id": "jst_public_debt",
@@ -651,7 +707,9 @@
       "loader": {
         "type": "jst"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "badge": "All public debt, 1870 on, 18 economies.",
+      "sourceUrl": "https://www.macrohistory.net/database/"
     },
     {
       "id": "budget_balance",
@@ -667,7 +725,8 @@
         "type": "worldbank",
         "indicator": "GC.NLD.TOTL.GD.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/GC.NLD.TOTL.GD.ZS"
     },
     {
       "id": "tax_revenue",
@@ -683,7 +742,8 @@
         "type": "worldbank",
         "indicator": "GC.TAX.TOTL.GD.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/GC.TAX.TOTL.GD.ZS"
     },
     {
       "id": "gov_spending",
@@ -699,7 +759,8 @@
         "type": "worldbank",
         "indicator": "GC.XPN.TOTL.GD.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/GC.XPN.TOTL.GD.ZS"
     },
     {
       "id": "military_spending",
@@ -715,7 +776,8 @@
         "type": "worldbank",
         "indicator": "MS.MIL.XPND.GD.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/MS.MIL.XPND.GD.ZS"
     },
     {
       "id": "population",
@@ -739,7 +801,9 @@
           "beforeYear": 1960
         }
       ],
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+      "sourceUrlHistorical": "https://ourworldindata.org/grapher/population"
     },
     {
       "id": "population_growth",
@@ -755,7 +819,8 @@
         "type": "worldbank",
         "indicator": "SP.POP.GROW"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.POP.GROW"
     },
     {
       "id": "birth_rate",
@@ -771,7 +836,8 @@
         "type": "worldbank",
         "indicator": "SP.DYN.CBRT.IN"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.DYN.CBRT.IN"
     },
     {
       "id": "death_rate",
@@ -787,7 +853,8 @@
         "type": "worldbank",
         "indicator": "SP.DYN.CDRT.IN"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.DYN.CDRT.IN"
     },
     {
       "id": "fertility_rate",
@@ -803,7 +870,8 @@
         "type": "worldbank",
         "indicator": "SP.DYN.TFRT.IN"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.DYN.TFRT.IN"
     },
     {
       "id": "urbanization",
@@ -827,7 +895,9 @@
           "beforeYear": 1960
         }
       ],
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.URB.TOTL.IN.ZS",
+      "sourceUrlHistorical": "https://ourworldindata.org/grapher/urbanization-last-500-years"
     },
     {
       "id": "age_0_14",
@@ -843,7 +913,8 @@
         "type": "worldbank",
         "indicator": "SP.POP.0014.TO.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.POP.0014.TO.ZS"
     },
     {
       "id": "age_65_plus",
@@ -859,7 +930,8 @@
         "type": "worldbank",
         "indicator": "SP.POP.65UP.TO.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.POP.65UP.TO.ZS"
     },
     {
       "id": "net_migration",
@@ -875,7 +947,8 @@
         "type": "worldbank",
         "indicator": "SM.POP.NETM"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SM.POP.NETM"
     },
     {
       "id": "population_density",
@@ -891,7 +964,8 @@
         "type": "worldbank",
         "indicator": "EN.POP.DNST"
       },
-      "lastYear": 2023
+      "lastYear": 2023,
+      "sourceUrl": "https://data.worldbank.org/indicator/EN.POP.DNST"
     },
     {
       "id": "life_expectancy",
@@ -915,7 +989,9 @@
           "beforeYear": 1960
         }
       ],
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.DYN.LE00.IN",
+      "sourceUrlHistorical": "https://ourworldindata.org/grapher/life-expectancy"
     },
     {
       "id": "infant_mortality",
@@ -931,7 +1007,8 @@
         "type": "worldbank",
         "indicator": "SP.DYN.IMRT.IN"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SP.DYN.IMRT.IN"
     },
     {
       "id": "child_mortality",
@@ -948,7 +1025,8 @@
         "slug": "child-mortality",
         "column": "child_mortality_rate"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://ourworldindata.org/grapher/child-mortality"
     },
     {
       "id": "health_spending",
@@ -964,7 +1042,8 @@
         "type": "worldbank",
         "indicator": "SH.XPD.CHEX.GD.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SH.XPD.CHEX.GD.ZS"
     },
     {
       "id": "physicians",
@@ -980,7 +1059,8 @@
         "type": "worldbank",
         "indicator": "SH.MED.PHYS.ZS"
       },
-      "lastYear": 2023
+      "lastYear": 2023,
+      "sourceUrl": "https://data.worldbank.org/indicator/SH.MED.PHYS.ZS"
     },
     {
       "id": "vacc_measles",
@@ -996,7 +1076,8 @@
         "type": "worldbank",
         "indicator": "SH.IMM.MEAS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SH.IMM.MEAS"
     },
     {
       "id": "vacc_dpt",
@@ -1012,7 +1093,8 @@
         "type": "worldbank",
         "indicator": "SH.IMM.IDPT"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SH.IMM.IDPT"
     },
     {
       "id": "energy_use",
@@ -1028,7 +1110,8 @@
         "type": "worldbank",
         "indicator": "EG.USE.PCAP.KG.OE"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE"
     },
     {
       "id": "electricity_access",
@@ -1044,7 +1127,8 @@
         "type": "worldbank",
         "indicator": "EG.ELC.ACCS.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/EG.ELC.ACCS.ZS"
     },
     {
       "id": "renewable_share",
@@ -1060,7 +1144,8 @@
         "type": "worldbank",
         "indicator": "EG.FEC.RNEW.ZS"
       },
-      "lastYear": 2022
+      "lastYear": 2022,
+      "sourceUrl": "https://data.worldbank.org/indicator/EG.FEC.RNEW.ZS"
     },
     {
       "id": "co2_per_capita",
@@ -1077,7 +1162,8 @@
         "slug": "co-emissions-per-capita",
         "column": "emissions_total_per_capita"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://ourworldindata.org/grapher/co-emissions-per-capita"
     },
     {
       "id": "oil_production",
@@ -1094,7 +1180,8 @@
         "slug": "oil-production-by-country",
         "column": "oil_production_twh"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://ourworldindata.org/grapher/oil-production-by-country"
     },
     {
       "id": "oil_rents",
@@ -1110,7 +1197,8 @@
         "type": "worldbank",
         "indicator": "NY.GDP.PETR.RT.ZS"
       },
-      "lastYear": 2021
+      "lastYear": 2021,
+      "sourceUrl": "https://data.worldbank.org/indicator/NY.GDP.PETR.RT.ZS"
     },
     {
       "id": "forest_area",
@@ -1126,7 +1214,8 @@
         "type": "worldbank",
         "indicator": "AG.LND.FRST.ZS"
       },
-      "lastYear": 2023
+      "lastYear": 2023,
+      "sourceUrl": "https://data.worldbank.org/indicator/AG.LND.FRST.ZS"
     },
     {
       "id": "literacy",
@@ -1149,7 +1238,9 @@
           "column": "literacy_rate"
         }
       ],
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/SE.ADT.LITR.ZS",
+      "sourceUrlHistorical": "https://ourworldindata.org/grapher/cross-country-literacy-rates"
     },
     {
       "id": "enroll_primary",
@@ -1165,7 +1256,8 @@
         "type": "worldbank",
         "indicator": "SE.PRM.ENRR"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SE.PRM.ENRR"
     },
     {
       "id": "enroll_secondary",
@@ -1181,7 +1273,8 @@
         "type": "worldbank",
         "indicator": "SE.SEC.ENRR"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SE.SEC.ENRR"
     },
     {
       "id": "enroll_tertiary",
@@ -1197,7 +1290,8 @@
         "type": "worldbank",
         "indicator": "SE.TER.ENRR"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/SE.TER.ENRR"
     },
     {
       "id": "mean_schooling",
@@ -1214,7 +1308,8 @@
         "slug": "mean-years-of-schooling-long-run",
         "column": "mf_youth_and_adults__15_64_years__average_years_of_education"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "sourceUrl": "https://ourworldindata.org/grapher/mean-years-of-schooling-long-run"
     },
     {
       "id": "expected_schooling",
@@ -1231,7 +1326,8 @@
         "indicator": "HD.HCI.EYRS",
         "wbSource": 63
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "sourceUrl": "https://data.worldbank.org/indicator/HD.HCI.EYRS"
     },
     {
       "id": "rnd_spending",
@@ -1247,7 +1343,8 @@
         "type": "worldbank",
         "indicator": "GB.XPD.RSDV.GD.ZS"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/GB.XPD.RSDV.GD.ZS"
     },
     {
       "id": "internet_users",
@@ -1263,7 +1360,8 @@
         "type": "worldbank",
         "indicator": "IT.NET.USER.ZS"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://data.worldbank.org/indicator/IT.NET.USER.ZS"
     },
     {
       "id": "mobile_subs",
@@ -1279,7 +1377,8 @@
         "type": "worldbank",
         "indicator": "IT.CEL.SETS.P2"
       },
-      "lastYear": 2024
+      "lastYear": 2024,
+      "sourceUrl": "https://data.worldbank.org/indicator/IT.CEL.SETS.P2"
     },
     {
       "id": "regime_type",
@@ -1294,7 +1393,8 @@
       "loader": {
         "type": "polity"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "sourceUrl": "https://www.systemicpeace.org/inscrdata.html"
     },
     {
       "id": "polity2",
@@ -1309,7 +1409,9 @@
       "loader": {
         "type": "polity"
       },
-      "lastYear": 2020
+      "lastYear": 2020,
+      "badge": "Institutions score, -10 to +10, 1800 to 2018.",
+      "sourceUrl": "https://www.systemicpeace.org/inscrdata.html"
     },
     {
       "id": "democracy_vdem",
@@ -1326,7 +1428,9 @@
         "slug": "electoral-democracy-index",
         "column": "electdem_vdem__estimate_best"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "badge": "Expert-coded democracy, 0 to 1, 1789 on.",
+      "sourceUrl": "https://ourworldindata.org/grapher/electoral-democracy-index"
     },
     {
       "id": "wars",
@@ -1341,7 +1445,9 @@
       "loader": {
         "type": "wars"
       },
-      "lastYear": 2025
+      "lastYear": 2025,
+      "sourceUrl": "https://correlatesofwar.org/data-sets/",
+      "carryForward": false
     },
     {
       "id": "colonial_status",
@@ -1355,7 +1461,19 @@
       "description": "Who ruled the territory in the nearest border snapshot. Derived from the map, so it follows the snapshot year.",
       "loader": {
         "type": "borders"
-      }
+      },
+      "sourceUrl": "https://github.com/aourednik/historical-basemaps",
+      "carryForward": false
     }
+  ],
+  "summaryMetrics": [
+    "population",
+    "maddison_gdppc",
+    "gdp_per_capita",
+    "gdp",
+    "life_expectancy",
+    "inflation",
+    "regime_type",
+    "exports_usd"
   ]
 }

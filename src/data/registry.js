@@ -21,6 +21,7 @@ export async function loadAppConfig() {
     entities,
     countries,
     tradeIndex: tradeIndex ?? {},
+    summaryMetrics: metrics.summaryMetrics ?? [],
   };
 }
 
