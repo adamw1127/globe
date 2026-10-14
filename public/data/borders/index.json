@@ -1,0 +1,21 @@
+{
+  "source": "historical-basemaps by A. Ourednik (GPL-3.0) to 1885; ICOW Colonial History 1.1 (Hensel) for colonial rulers; CShapes 2.0 (Schvitz, Girardin, Rüegger, Weidmann, Cederman and Gleditsch, CC BY-NC-SA 4.0) 1886 to 2013; Natural Earth (public domain) from 2014 and for land",
+  "snapshots": [
+    1600,
+    1650,
+    1700,
+    1715,
+    1783,
+    1800,
+    1815,
+    1878,
+    1880,
+    2014
+  ],
+  "yearly": {
+    "from": 1886,
+    "to": 2013,
+    "file": "cshapes.json"
+  },
+  "land": "land.json"
+}

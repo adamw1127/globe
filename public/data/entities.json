@@ -1,0 +1,1114 @@
+{
+  "_comment": "Maps territory names in the border snapshots to data entities. 'aliases' maps a border NAME to an ISO3 code or to a key in 'historical' (a value can also be a list of {until, code} rules for names that mean different places in different years, or {partOf: ISO3} for a territory that is only part of a modern state: it gets no data of its own and links to that state). Names not listed are matched to modern countries automatically by scripts/build-borders.mjs. A historical entity's data comes from its own code first (e.g. SUN for the USSR in Maddison and Polity); 'proxy' names a successor whose data is shown instead, with 'note' explaining the approximation. Without a proxy the panel says no data exists for that entity and lists its successors.",
+  "historical": {
+    "SUN": {
+      "name": "Soviet Union",
+      "successors": [
+        "RUS",
+        "UKR",
+        "BLR",
+        "UZB",
+        "KAZ",
+        "GEO",
+        "AZE",
+        "LTU",
+        "MDA",
+        "LVA",
+        "KGZ",
+        "TJK",
+        "ARM",
+        "TKM",
+        "EST"
+      ],
+      "from": 1922,
+      "to": 1991
+    },
+    "YUG": {
+      "name": "Yugoslavia",
+      "successors": [
+        "SRB",
+        "HRV",
+        "SVN",
+        "BIH",
+        "MKD",
+        "MNE",
+        "XKX"
+      ],
+      "from": 1918,
+      "to": 1992
+    },
+    "CSK": {
+      "name": "Czechoslovakia",
+      "successors": [
+        "CZE",
+        "SVK"
+      ],
+      "from": 1918,
+      "to": 1992
+    },
+    "DDR": {
+      "name": "East Germany",
+      "successors": [
+        "DEU"
+      ],
+      "from": 1949,
+      "to": 1990
+    },
+    "BRD": {
+      "name": "West Germany",
+      "successors": [
+        "DEU"
+      ],
+      "from": 1949,
+      "to": 1990
+    },
+    "AUH": {
+      "name": "Austria-Hungary",
+      "successors": [
+        "AUT",
+        "HUN",
+        "CZE",
+        "SVK",
+        "SVN",
+        "HRV",
+        "BIH",
+        "POL",
+        "UKR",
+        "ROU",
+        "ITA"
+      ],
+      "from": 1867,
+      "to": 1918
+    },
+    "HAB": {
+      "name": "Habsburg Monarchy",
+      "successors": [
+        "AUT",
+        "HUN",
+        "CZE",
+        "SVK",
+        "SVN",
+        "HRV",
+        "BEL",
+        "ITA"
+      ],
+      "to": 1867
+    },
+    "HRE": {
+      "name": "Holy Roman Empire",
+      "successors": [
+        "DEU",
+        "AUT",
+        "CZE",
+        "BEL",
+        "NLD",
+        "LUX",
+        "CHE",
+        "ITA",
+        "SVN",
+        "FRA",
+        "POL"
+      ],
+      "to": 1806
+    },
+    "RUS_EMP": {
+      "name": "Russian Empire",
+      "successors": [
+        "RUS",
+        "UKR",
+        "BLR",
+        "UZB",
+        "KAZ",
+        "GEO",
+        "AZE",
+        "LTU",
+        "MDA",
+        "LVA",
+        "KGZ",
+        "TJK",
+        "ARM",
+        "TKM",
+        "EST",
+        "FIN",
+        "POL"
+      ],
+      "from": 1721,
+      "to": 1917,
+      "proxy": "RUS",
+      "note": "Figures are for the territory of present-day Russia."
+    },
+    "MUSCOVY": {
+      "name": "Tsardom of Muscovy",
+      "successors": [
+        "RUS"
+      ],
+      "from": 1547,
+      "to": 1721,
+      "proxy": "RUS",
+      "note": "Figures are for the territory of present-day Russia."
+    },
+    "OTT": {
+      "name": "Ottoman Empire",
+      "successors": [
+        "TUR",
+        "GRC",
+        "BGR",
+        "SRB",
+        "ROU",
+        "EGY",
+        "IRQ",
+        "SYR",
+        "LBN",
+        "JOR",
+        "ISR",
+        "PSE",
+        "SAU",
+        "YEM",
+        "LBY",
+        "TUN",
+        "DZA",
+        "ALB",
+        "BIH",
+        "MKD",
+        "MNE",
+        "CYP"
+      ],
+      "to": 1922,
+      "proxy": "TUR",
+      "note": "Figures are for the territory of present-day Turkey."
+    },
+    "QING": {
+      "name": "Qing Empire",
+      "successors": [
+        "CHN",
+        "MNG",
+        "TWN"
+      ],
+      "from": 1644,
+      "to": 1912,
+      "proxy": "CHN",
+      "note": "Figures are for the territory of present-day China."
+    },
+    "MING": {
+      "name": "Ming Empire",
+      "successors": [
+        "CHN"
+      ],
+      "from": 1368,
+      "to": 1644,
+      "proxy": "CHN",
+      "note": "Figures are for the territory of present-day China."
+    },
+    "CHN_ROC": {
+      "name": "Republic of China (warlord era)",
+      "successors": [
+        "CHN",
+        "TWN"
+      ],
+      "from": 1912,
+      "to": 1949,
+      "proxy": "CHN",
+      "note": "Figures are for the territory of present-day China."
+    },
+    "SAFAVID": {
+      "name": "Safavid Empire",
+      "successors": [
+        "IRN",
+        "AZE",
+        "AFG",
+        "IRQ",
+        "ARM",
+        "GEO"
+      ],
+      "from": 1501,
+      "to": 1736,
+      "proxy": "IRN",
+      "note": "Figures are for the territory of present-day Iran."
+    },
+    "MUGHAL": {
+      "name": "Mughal Empire",
+      "successors": [
+        "IND",
+        "PAK",
+        "BGD",
+        "AFG"
+      ],
+      "from": 1526,
+      "to": 1857
+    },
+    "MARATHA": {
+      "name": "Maratha Confederacy",
+      "successors": [
+        "IND"
+      ],
+      "from": 1674,
+      "to": 1818
+    },
+    "RAJ": {
+      "name": "British India",
+      "successors": [
+        "IND",
+        "PAK",
+        "BGD",
+        "MMR"
+      ],
+      "from": 1858,
+      "to": 1947
+    },
+    "EIC": {
+      "name": "British East India Company territories",
+      "successors": [
+        "IND",
+        "PAK",
+        "BGD"
+      ],
+      "to": 1858
+    },
+    "PLC": {
+      "name": "Polish-Lithuanian Commonwealth",
+      "successors": [
+        "POL",
+        "LTU",
+        "BLR",
+        "UKR",
+        "LVA"
+      ],
+      "from": 1569,
+      "to": 1795
+    },
+    "DEN_NOR": {
+      "name": "Denmark-Norway",
+      "successors": [
+        "DNK",
+        "NOR",
+        "ISL"
+      ],
+      "from": 1524,
+      "to": 1814
+    },
+    "SWE_NOR": {
+      "name": "Sweden-Norway",
+      "successors": [
+        "SWE",
+        "NOR"
+      ],
+      "from": 1814,
+      "to": 1905
+    },
+    "ENG_IRL": {
+      "name": "England and Ireland",
+      "successors": [
+        "GBR",
+        "IRL"
+      ],
+      "to": 1707,
+      "proxy": "GBR",
+      "note": "Figures are for present-day United Kingdom territory, which before 1700 mostly reflects England."
+    },
+    "SCOTLAND": {
+      "name": "Kingdom of Scotland",
+      "successors": [
+        "GBR"
+      ],
+      "to": 1707
+    },
+    "IRELAND_KGD": {
+      "name": "Kingdom of Ireland",
+      "successors": [
+        "IRL",
+        "GBR"
+      ],
+      "from": 1542,
+      "to": 1800
+    },
+    "PRUSSIA": {
+      "name": "Prussia",
+      "successors": [
+        "DEU",
+        "POL",
+        "RUS",
+        "LTU"
+      ],
+      "from": 1525,
+      "to": 1871
+    },
+    "KOREA_HIST": {
+      "name": "Korea (unified)",
+      "successors": [
+        "KOR",
+        "PRK"
+      ],
+      "to": 1945
+    },
+    "NEW_SPAIN": {
+      "name": "Viceroyalty of New Spain",
+      "successors": [
+        "MEX",
+        "USA",
+        "GTM",
+        "HND",
+        "SLV",
+        "NIC",
+        "CRI",
+        "CUB",
+        "PHL"
+      ],
+      "from": 1535,
+      "to": 1821
+    },
+    "PERU_VIC": {
+      "name": "Viceroyalty of Peru",
+      "successors": [
+        "PER",
+        "BOL",
+        "CHL",
+        "ECU"
+      ],
+      "from": 1542,
+      "to": 1824
+    },
+    "NEW_GRANADA": {
+      "name": "Viceroyalty of New Granada",
+      "successors": [
+        "COL",
+        "VEN",
+        "ECU",
+        "PAN"
+      ],
+      "from": 1717,
+      "to": 1819
+    },
+    "RIO_PLATA": {
+      "name": "Viceroyalty of the Rio de la Plata",
+      "successors": [
+        "ARG",
+        "URY",
+        "PRY",
+        "BOL"
+      ],
+      "from": 1776,
+      "to": 1814
+    },
+    "UPRP": {
+      "name": "United Provinces of the Rio de la Plata",
+      "successors": [
+        "ARG",
+        "URY",
+        "BOL"
+      ],
+      "from": 1810,
+      "to": 1831
+    },
+    "INCA": {
+      "name": "Inca Empire",
+      "successors": [
+        "PER",
+        "BOL",
+        "ECU",
+        "CHL",
+        "ARG"
+      ],
+      "to": 1572
+    },
+    "ITALIAN_STATES": {
+      "name": "Pre-unification Italian state",
+      "successors": [
+        "ITA"
+      ],
+      "to": 1861
+    },
+    "GERMAN_STATES": {
+      "name": "Pre-unification German state",
+      "successors": [
+        "DEU"
+      ],
+      "to": 1871
+    },
+    "CENTRAL_ASIA": {
+      "name": "Central Asian khanates",
+      "successors": [
+        "UZB",
+        "TKM",
+        "KAZ",
+        "TJK",
+        "KGZ"
+      ],
+      "to": 1920
+    },
+    "CRIMEA": {
+      "name": "Crimean Khanate",
+      "successors": [
+        "UKR"
+      ],
+      "from": 1441,
+      "to": 1783
+    },
+    "FR_INDOCHINA": {
+      "name": "French Indochina",
+      "successors": [
+        "VNM",
+        "LAO",
+        "KHM"
+      ],
+      "from": 1887,
+      "to": 1954
+    },
+    "FR_WEST_AFRICA": {
+      "name": "French West Africa",
+      "successors": [
+        "SEN",
+        "MLI",
+        "MRT",
+        "GIN",
+        "CIV",
+        "BFA",
+        "BEN",
+        "NER"
+      ],
+      "from": 1895,
+      "to": 1958
+    },
+    "FR_EQ_AFRICA": {
+      "name": "French Equatorial Africa",
+      "successors": [
+        "GAB",
+        "COG",
+        "CAF",
+        "TCD"
+      ],
+      "from": 1910,
+      "to": 1958
+    },
+    "RHODESIA": {
+      "name": "Rhodesia",
+      "successors": [
+        "ZMB",
+        "ZWE"
+      ],
+      "from": 1895,
+      "to": 1964
+    },
+    "SWE_EMP": {
+      "name": "Swedish Empire",
+      "successors": [
+        "SWE",
+        "FIN",
+        "EST",
+        "LVA"
+      ],
+      "from": 1611,
+      "to": 1721,
+      "proxy": "SWE",
+      "note": "Figures are for present-day Sweden."
+    },
+    "HAWAII": {
+      "name": "Kingdom of Hawaii",
+      "successors": [
+        "USA"
+      ],
+      "from": 1795,
+      "to": 1898
+    },
+    "TIBET": {
+      "name": "Tibet",
+      "successors": [
+        "CHN"
+      ],
+      "to": 1951
+    },
+    "XINJIANG": {
+      "name": "Xinjiang",
+      "successors": [
+        "CHN"
+      ],
+      "to": 1949
+    },
+    "MANCHURIA": {
+      "name": "Manchuria",
+      "successors": [
+        "CHN"
+      ],
+      "to": 1945
+    },
+    "ARABIA": {
+      "name": "Arabia",
+      "successors": [
+        "SAU",
+        "YEM",
+        "OMN",
+        "ARE",
+        "QAT",
+        "KWT"
+      ],
+      "to": 1932
+    },
+    "AUS_COLONIES": {
+      "name": "Australian colonies",
+      "successors": [
+        "AUS"
+      ],
+      "to": 1901
+    },
+    "SA_STATES": {
+      "name": "Southern African colony or republic",
+      "successors": [
+        "ZAF"
+      ],
+      "to": 1910
+    },
+    "INDIAN_STATES": {
+      "name": "Indian princely state",
+      "successors": [
+        "IND",
+        "PAK",
+        "BGD"
+      ],
+      "to": 1947
+    },
+    "BAV": {
+      "name": "Kingdom of Bavaria",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "SAX": {
+      "name": "Saxony",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "HAN": {
+      "name": "Hanover",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "BAD": {
+      "name": "Baden",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "WUR": {
+      "name": "Württemberg",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "HSE": {
+      "name": "Electoral Hesse (Hesse-Kassel)",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "HSG": {
+      "name": "Grand Duchy of Hesse (Hesse-Darmstadt)",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "MEC": {
+      "name": "Mecklenburg-Schwerin",
+      "successors": [
+        "DEU"
+      ]
+    },
+    "MOD": {
+      "name": "Duchy of Modena",
+      "successors": [
+        "ITA"
+      ]
+    },
+    "PMA": {
+      "name": "Duchy of Parma",
+      "successors": [
+        "ITA"
+      ]
+    },
+    "SIC": {
+      "name": "Kingdom of the Two Sicilies",
+      "successors": [
+        "ITA"
+      ]
+    },
+    "TUS": {
+      "name": "Grand Duchy of Tuscany",
+      "successors": [
+        "ITA"
+      ]
+    },
+    "PAP": {
+      "name": "Papal States",
+      "successors": [
+        "ITA"
+      ]
+    },
+    "SAR": {
+      "name": "Kingdom of Sardinia (Piedmont)",
+      "successors": [
+        "ITA"
+      ]
+    },
+    "ZAN": {
+      "name": "Sultanate of Zanzibar",
+      "successors": [
+        "TZA"
+      ]
+    },
+    "RVN": {
+      "name": "South Vietnam",
+      "successors": [
+        "VNM"
+      ]
+    },
+    "DRV": {
+      "name": "North Vietnam",
+      "successors": [
+        "VNM"
+      ]
+    },
+    "YAR": {
+      "name": "North Yemen",
+      "successors": [
+        "YEM"
+      ]
+    },
+    "YPR": {
+      "name": "South Yemen",
+      "successors": [
+        "YEM"
+      ]
+    },
+    "VENICE": {
+      "name": "Republic of Venice",
+      "successors": [
+        "ITA",
+        "HRV",
+        "SVN"
+      ],
+      "to": 1797
+    },
+    "GENOA": {
+      "name": "Republic of Genoa",
+      "successors": [
+        "ITA"
+      ],
+      "to": 1797
+    }
+  },
+  "aliases": {
+    "Abyssinia": "ETH",
+    "Accra": {
+      "partOf": "GHA"
+    },
+    "Algeria (FR)": "DZA",
+    "Algeria (France)": "DZA",
+    "Algiers": {
+      "partOf": "DZA"
+    },
+    "Anglo-Egyptian Sudan": "SDN",
+    "Angola (Portugal)": "AGO",
+    "Anhalt": "GERMAN_STATES",
+    "Annam": {
+      "partOf": "VNM"
+    },
+    "Arabia": "ARABIA",
+    "Arabia (Nejd)": {
+      "partOf": "SAU"
+    },
+    "Arakan": {
+      "partOf": "MMR"
+    },
+    "Arakan (Indian princely state)": {
+      "partOf": "MMR"
+    },
+    "Asante": {
+      "partOf": "GHA"
+    },
+    "Assam": "INDIAN_STATES",
+    "Austria Hungary": "AUH",
+    "Austrian Empire": "HAB",
+    "Austrian Netherlands": "BEL",
+    "Austro-Hungarian Empire": "AUH",
+    "Ava": {
+      "partOf": "MMR"
+    },
+    "Ayutthaya": "THA",
+    "Baden": "BAD",
+    "Basutoland": "LSO",
+    "Bavaria": "BAV",
+    "Belgian Congo": "COD",
+    "Bengal": "INDIAN_STATES",
+    "Bokhara Khanate": "CENTRAL_ASIA",
+    "Bremen": "GERMAN_STATES",
+    "British East Africa": "KEN",
+    "British East India Company": "EIC",
+    "British Guiana": "GUY",
+    "British Raj": "RAJ",
+    "British Somaliland": "SOM",
+    "Brunswick": "GERMAN_STATES",
+    "Buganda": {
+      "partOf": "UGA"
+    },
+    "Bunyoro": {
+      "partOf": "UGA"
+    },
+    "Burma": "MMR",
+    "Burma (UK)": "MMR",
+    "Burmese kingdoms": {
+      "partOf": "MMR"
+    },
+    "Byelarus": "BLR",
+    "Cape Colony": {
+      "partOf": "ZAF"
+    },
+    "Carnatic": "INDIAN_STATES",
+    "Ceylon": "LKA",
+    "Ceylon (Dutch)": {
+      "partOf": "LKA"
+    },
+    "Chinese Warlords": "CHN_ROC",
+    "Chinese warlords": "CHN_ROC",
+    "Cochin China": {
+      "partOf": "VNM"
+    },
+    "Congo": [
+      {
+        "until": 1944,
+        "code": "COD"
+      },
+      {
+        "code": "COG"
+      }
+    ],
+    "Congo (France)": "COG",
+    "Crimean Khanate": "CRIMEA",
+    "Cuba (Spain)": "CUB",
+    "Cyraneica (UK Lybia)": {
+      "partOf": "LBY"
+    },
+    "Cyrenaica": {
+      "partOf": "LBY"
+    },
+    "Czechoslovakia": "CSK",
+    "Dahomey": "BEN",
+    "Danzig": {
+      "partOf": "POL"
+    },
+    "Denmark-Norway": "DEN_NOR",
+    "Dodecanese Islands": {
+      "partOf": "GRC"
+    },
+    "Dominion of Newfoundland": "CAN",
+    "Dutch East Indies": "IDN",
+    "Dutch Guiana": "SUR",
+    "Dutch Guinea": "SUR",
+    "Dutch Republic": "NLD",
+    "East Germany": "DDR",
+    "East Prussia": "PRUSSIA",
+    "Electoral Hesse": "HSE",
+    "Emirate of Bin Shal'an": {
+      "partOf": "SAU"
+    },
+    "Empire of Japan": "JPN",
+    "England and Ireland": "ENG_IRL",
+    "Eritrea (Italy)": "ERI",
+    "Ethiopia (Italy)": "ETH",
+    "Far Eastern SSR": {
+      "partOf": "SUN"
+    },
+    "Fezzan (Frech Lybia)": {
+      "partOf": "LBY"
+    },
+    "Florence": "TUS",
+    "French Cameroons": "CMR",
+    "French Equatorial Africa": "FR_EQ_AFRICA",
+    "French Indo-China": "FR_INDOCHINA",
+    "French Indochina": "FR_INDOCHINA",
+    "French Somaliland": "DJI",
+    "French West Africa": "FR_WEST_AFRICA",
+    "Gambia, The": "GMB",
+    "Genoa": "GENOA",
+    "German E. Africa (Tanganyika)": "TZA",
+    "German Empire": "DEU",
+    "German South-West Africa": "NAM",
+    "Germany (France)": {
+      "partOf": "DEU"
+    },
+    "Germany (Soviet)": {
+      "partOf": "DEU"
+    },
+    "Germany (UK)": {
+      "partOf": "DEU"
+    },
+    "Germany (USA)": {
+      "partOf": "DEU"
+    },
+    "Goa": {
+      "partOf": "IND"
+    },
+    "Golconda": "INDIAN_STATES",
+    "Gold Coast": "GHA",
+    "Gold Coast (GB)": "GHA",
+    "Grand Duchy of Hesse": "HSG",
+    "Griqualand West": "SA_STATES",
+    "Guiana": {
+      "partOf": "GUY"
+    },
+    "Guinea-Bissau (Portugal)": "GNB",
+    "Habsburg Austria": "HAB",
+    "Habsburg Netherlands": "BEL",
+    "Hail": {
+      "partOf": "SAU"
+    },
+    "Hamburg": "GERMAN_STATES",
+    "Hanover": "HAN",
+    "Harer (Egypt)": {
+      "partOf": "ETH"
+    },
+    "Hejaz": {
+      "partOf": "SAU"
+    },
+    "Hindu kingdoms": "INDIAN_STATES",
+    "Hohenzollern": "GERMAN_STATES",
+    "Holstein": "GERMAN_STATES",
+    "Holy Roman Empire": "HRE",
+    "Imerina": {
+      "partOf": "MDG"
+    },
+    "Imperial Japan": "JPN",
+    "Inca Empire": "INCA",
+    "India": [
+      {
+        "until": 1946,
+        "code": "RAJ"
+      },
+      {
+        "code": "IND"
+      }
+    ],
+    "Islamic and Hindu states": "INDIAN_STATES",
+    "Italian Somaliland": "SOM",
+    "Ivory Coast": "CIV",
+    "Jamaica (UK)": "JAM",
+    "Japan (USA)": "JPN",
+    "Japan (Warring States)": "JPN",
+    "Kamerun": {
+      "partOf": "CMR"
+    },
+    "Khiva Khanate": "CENTRAL_ASIA",
+    "Kingdom of Brazil": "BRA",
+    "Kingdom of Hawaii": "HAWAII",
+    "Kingdom of Ireland": "IRELAND_KGD",
+    "Kingdom of Italy": "ITA",
+    "Kingdom of Sardinia": "SAR",
+    "Kingdom of the Two Sicilies": "SIC",
+    "Korea": [
+      {
+        "until": 1945,
+        "code": "KOREA_HIST"
+      },
+      {
+        "code": "KOR"
+      }
+    ],
+    "Korea (USA)": "KOR",
+    "Korea (USSR)": "PRK",
+    "Korea, Democratic People's Republic of": "PRK",
+    "Korea, Republic of": "KOR",
+    "Lagos": {
+      "partOf": "NGA"
+    },
+    "Libya (IT)": "LBY",
+    "Lippe-Detmold": "GERMAN_STATES",
+    "Lombardy": "ITALIAN_STATES",
+    "Lucca": "ITALIAN_STATES",
+    "Lübeck": "GERMAN_STATES",
+    "Macedonia": "MKD",
+    "Madagascar (France)": "MDG",
+    "Mahratta states": "MARATHA",
+    "Malaya": {
+      "partOf": "MYS"
+    },
+    "Manchu Empire": "QING",
+    "Manchuria": "MANCHURIA",
+    "Mandatory Palestine (GB)": "PSE",
+    "Maratha Confederacy": "MARATHA",
+    "Martinique (France)": "MTQ",
+    "Mecklenburg-Schwerin": "MEC",
+    "Mecklenburg-Strelitz": "GERMAN_STATES",
+    "Merina Kingdom": {
+      "partOf": "MDG"
+    },
+    "Mesopotamia (GB)": "IRQ",
+    "Milan": "ITALIAN_STATES",
+    "Milano (Austria)": "ITALIAN_STATES",
+    "Ming Chinese Empire": "MING",
+    "Modena": "MOD",
+    "Morocco (France)": "MAR",
+    "Mozambique (Portugal)": "MOZ",
+    "Mughal Empire": "MUGHAL",
+    "Muscat and Oman": "OMN",
+    "Mysore": "INDIAN_STATES",
+    "Mysore (Indian princely state)": "INDIAN_STATES",
+    "Naples": "SIC",
+    "Nassau": "GERMAN_STATES",
+    "Natal": "SA_STATES",
+    "Nejd": {
+      "partOf": "SAU"
+    },
+    "Netherlands Indies": "IDN",
+    "New South Wales": "AUS_COLONIES",
+    "New South Wales (UK)": "AUS_COLONIES",
+    "Northern Rhodesia": "ZMB",
+    "Northern Territory (UK)": "AUS_COLONIES",
+    "Nyasaland": "MWI",
+    "Oldenburg": "GERMAN_STATES",
+    "Oman (British Raj)": "OMN",
+    "Orange Free State": "SA_STATES",
+    "Ottoman Empire": "OTT",
+    "Ottoman Sultanate": "OTT",
+    "Oudh": "INDIAN_STATES",
+    "Palatinate": "GERMAN_STATES",
+    "Papal States": "PAP",
+    "Parma": "PMA",
+    "Pegu": {
+      "partOf": "MMR"
+    },
+    "Persia": "IRN",
+    "Philippines": "PHL",
+    "Poland-Lithuania": "PLC",
+    "Polish–Lithuanian Commonwealth": "PLC",
+    "Portuguese Brazil": "BRA",
+    "Portuguese East Africa": "MOZ",
+    "Portuguese Guinea": "GNB",
+    "Post-Ming Warlords": "QING",
+    "Prussia": "PRUSSIA",
+    "Qing Empire": "QING",
+    "Queensland (UK)": "AUS_COLONIES",
+    "Rapa Nui": {
+      "partOf": "CHL"
+    },
+    "Rattanakosin Kingdom": "THA",
+    "Republic of Kraków": {
+      "partOf": "POL"
+    },
+    "Republic of Turkey": "TUR",
+    "Rhodesia": [
+      {
+        "until": 1944,
+        "code": "RHODESIA"
+      },
+      {
+        "code": "ZWE"
+      }
+    ],
+    "Rio De Oro": "ESH",
+    "Russian Empire": "RUS_EMP",
+    "Rwanda (Belgium)": "RWA",
+    "Saar Protectorate": {
+      "partOf": "DEU"
+    },
+    "Safavid Empire": "SAFAVID",
+    "Sakhalin (RU)": {
+      "partOf": "RUS"
+    },
+    "Sardinia-Piedmont": "SAR",
+    "Savoy": "SAR",
+    "Saxony": "SAX",
+    "Schaumburg-Lippe": "GERMAN_STATES",
+    "Schleswig": "GERMAN_STATES",
+    "Scotland": "SCOTLAND",
+    "Senegal (FR)": "SEN",
+    "Siam": "THA",
+    "Sikkim (Indian princely state)": "INDIAN_STATES",
+    "Sokoto Caliphate": {
+      "partOf": "NGA"
+    },
+    "South Australia (UK)": "AUS_COLONIES",
+    "South Russia": {
+      "partOf": "RUS"
+    },
+    "Southern Cameroon": {
+      "partOf": "CMR"
+    },
+    "Southern Rhodesia": "ZWE",
+    "Spanish Guinea": "GNQ",
+    "Spanish Sahara": "ESH",
+    "Sultanate of Zanzibar": "ZAN",
+    "Sultinate of Zanzibar": "ZAN",
+    "Swaziland": "SWZ",
+    "Sweden–Norway": "SWE_NOR",
+    "Swiss Confederation": "CHE",
+    "Syria (France)": "SYR",
+    "Tanzania, United Republic of": "TZA",
+    "Thuringia": "GERMAN_STATES",
+    "Tibet": "TIBET",
+    "Togoland": "TGO",
+    "Tokugawa shogunate": "JPN",
+    "Tonkin": {
+      "partOf": "VNM"
+    },
+    "Transvaal": "SA_STATES",
+    "Travancore": "INDIAN_STATES",
+    "Trinidad": "TTO",
+    "Tripolitana (UK Lybia)": {
+      "partOf": "LBY"
+    },
+    "Tripolitania": {
+      "partOf": "LBY"
+    },
+    "Trucial Oman": "ARE",
+    "Tsardom of Muscovy": "MUSCOVY",
+    "Tunis": {
+      "partOf": "TUN"
+    },
+    "Turan": "CENTRAL_ASIA",
+    "Turkish Cypriot-administered area": "CYP",
+    "Tuscany": "TUS",
+    "USSR": "SUN",
+    "Ukraine": [
+      {
+        "until": 1922,
+        "code": "PART:UKR"
+      },
+      {
+        "code": "UKR"
+      }
+    ],
+    "Union of South Africa": "ZAF",
+    "United Kingdom of Great Britain and Ireland": "GBR",
+    "United Provinces": "NLD",
+    "United Provinces of the Río de la Plata": "UPRP",
+    "United States of America": "USA",
+    "Venetia": "ITALIAN_STATES",
+    "Venice": "VENICE",
+    "Viceroyalty of Brazil": "BRA",
+    "Viceroyalty of New Granada": "NEW_GRANADA",
+    "Viceroyalty of New Spain": "NEW_SPAIN",
+    "Viceroyalty of Peru": "PERU_VIC",
+    "Viceroyalty of the Río de la Plata": "RIO_PLATA",
+    "Victoria (UK)": "AUS_COLONIES",
+    "Vijayanagara": "INDIAN_STATES",
+    "Walbis Bay": {
+      "partOf": "NAM"
+    },
+    "Waldeck": "GERMAN_STATES",
+    "Watassid Morocco": "MAR",
+    "West Germany": "BRD",
+    "Western Australia (UK)": "AUS_COLONIES",
+    "White Russia": {
+      "partOf": "BLR"
+    },
+    "Württemberg": "WUR",
+    "Xinjiang": "XINJIANG",
+    "Yemen (UK)": "YEM",
+    "Yugoslavia": "YUG",
+    "Zaire": "COD",
+    "Zaire (Belgium)": "COD",
+    "Zanzibar": "ZAN",
+    "Zululand": "SA_STATES",
+    "central Asian khanates": "CENTRAL_ASIA",
+    "Đại Việt": "VNM"
+  }
+}

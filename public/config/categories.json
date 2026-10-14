@@ -1,0 +1,14 @@
+{
+  "_comment": "Side-panel sections. Add, rename or reorder here; metrics reference categories by id.",
+  "categories": [
+    { "id": "economy", "name": "Economy" },
+    { "id": "finance", "name": "Finance & Money" },
+    { "id": "trade", "name": "Trade" },
+    { "id": "government", "name": "Government & Debt" },
+    { "id": "demographics", "name": "Demographics" },
+    { "id": "health", "name": "Health" },
+    { "id": "energy", "name": "Energy & Environment" },
+    { "id": "education", "name": "Education & Technology" },
+    { "id": "politics", "name": "Politics" }
+  ]
+}
