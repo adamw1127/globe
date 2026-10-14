@@ -1,12 +1,14 @@
 import { formatLegend } from './format.js';
 
-// Small values warm and light, large values dark: pale sand through blues to
-// dark green. Lightness falls steadily so order reads without hue.
-export const MISSING_COLOR = '#2b3240';
-const SEQUENTIAL = ['#ffd49c', '#8fd0e1', '#64b2de', '#4493d0', '#007ea2', '#00685a', '#154f2f'];
-// Measures that go negative: the most negative warmest, the most positive darkest.
-const NEGATIVE = ['#cd632d', '#e5955d', '#f3c898'];
-const POSITIVE = ['#8cc8e0', '#4b9bcf', '#00778d', '#154f2f'];
+// Map colors run from red (worse) to green (better), following each
+// measure's `better` direction ("up" or "down"); measures with no better
+// direction run red for low to green for high. Lightness also changes along
+// the ramp (deep red is darker than green), so the two ends stay apart for
+// readers with red-green color blindness.
+export const RAMP = ['#a50026', '#d73027', '#f46d43', '#fdae61', '#d9ef8b', '#66bd63', '#1a9850'];
+export const MISSING_COLOR = '#6b7280'; // territory with no figure
+export const LAND_COLOR = '#2f3744'; // land no state covers on this map
+export const NEUTRAL_COLOR = '#3b4a63'; // "Color by: none"
 
 const range = (lo, hi, format) => {
   const a = formatLegend(lo, format);
@@ -25,42 +27,36 @@ function spread(palette, n) {
   return Array.from({ length: n }, (_, i) => palette[Math.round((i / (n - 1)) * (palette.length - 1))]);
 }
 
-// Binned color scale for the values on the map. Quantile bins keep skewed
-// measures readable; never more bins than distinct values.
-export function buildScale(values, format) {
-  const v = values.filter((x) => typeof x === 'number' && Number.isFinite(x)).sort((a, b) => a - b);
-  if (!v.length) return null;
-  const min = v[0];
-  const max = v[v.length - 1];
-
-  if (min < 0 && max > 0) {
-    const neg = v.filter((x) => x < 0);
-    const pos = v.filter((x) => x >= 0);
-    const negCuts = quantiles(neg, Math.min(NEGATIVE.length, new Set(neg).size));
-    const posCuts = quantiles(pos, Math.min(POSITIVE.length, new Set(pos).size));
-    const negPal = NEGATIVE.slice(0, negCuts.length + 1);
-    const posPal = POSITIVE.slice(POSITIVE.length - posCuts.length - 1);
-    const color = (x) => {
-      if (x < 0) {
-        const i = negCuts.findIndex((c) => x < c);
-        return negPal[i === -1 ? negCuts.length : i];
-      }
-      const i = posCuts.findIndex((c) => x < c);
-      return posPal[i === -1 ? posCuts.length : i];
-    };
-    const legend = [
-      ...[min, ...negCuts].map((lo, i, arr) => ({ color: negPal[i], label: range(lo, arr[i + 1] ?? 0, format) })),
-      ...[0, ...posCuts].map((lo, i, arr) => ({ color: posPal[i], label: range(lo, arr[i + 1] ?? max, format) })),
-    ];
-    return { color, legend };
+// Binned scale. `breaks` (class boundaries) come from the metric's stats so
+// a color means the same value in every year; without them, quantiles of
+// this year's values are used.
+export function buildScale({ values, breaks, min, max, format, better }) {
+  let cuts = breaks;
+  if (!cuts) {
+    const v = values.filter((x) => typeof x === 'number' && Number.isFinite(x)).sort((a, b) => a - b);
+    if (!v.length) return null;
+    cuts = quantiles(v, Math.min(RAMP.length, new Set(v).size));
+    min = v[0];
+    max = v[v.length - 1];
   }
-
-  const cuts = quantiles(v, Math.min(SEQUENTIAL.length, new Set(v).size));
-  const palette = cuts.length + 1 < SEQUENTIAL.length ? spread(SEQUENTIAL, cuts.length + 1) : SEQUENTIAL;
+  const ramp = cuts.length + 1 < RAMP.length ? spread(RAMP, cuts.length + 1) : RAMP;
+  const palette = better === 'down' ? [...ramp].reverse() : ramp;
   const color = (x) => {
     const i = cuts.findIndex((c) => x < c);
     return palette[i === -1 ? cuts.length : i];
   };
   const legend = [min, ...cuts].map((lo, i, arr) => ({ color: palette[i], label: range(lo, arr[i + 1] ?? max, format) }));
-  return { color, legend };
+  return { color, legend, better };
+}
+
+// Estimates are drawn in a washed-out version of their color.
+const cache = new Map();
+export function faded(hex) {
+  if (!cache.has(hex)) {
+    const mix = (a, b) => Math.round(a * 0.45 + b * 0.55);
+    const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    const g = [0x55, 0x5d, 0x6b];
+    cache.set(hex, `#${c.map((v, i) => mix(v, g[i]).toString(16).padStart(2, '0')).join('')}`);
+  }
+  return cache.get(hex);
 }

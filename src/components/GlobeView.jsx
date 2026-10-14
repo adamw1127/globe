@@ -2,12 +2,13 @@ import { useEffect, useRef } from 'react';
 import Globe from 'globe.gl';
 import { MeshPhongMaterial, Color } from 'three';
 
-const BASE_ALT = 0.006;
+const LAND_ALT = 0.003;
+const BASE_ALT = 0.008;
 const SELECT_ALT = 0.03;
 
 // Thin React wrapper around globe.gl. Polygons come from the current border
 // snapshot; `colorOf(feature)` provides the choropleth color.
-export default function GlobeView({ features, colorOf, selectedKey, onSelect, featureKey, labelOf, flyTo }) {
+export default function GlobeView({ features, land, colorOf, selectedKey, onSelect, featureKey, labelOf, flyTo }) {
   const elRef = useRef(null);
   const globeRef = useRef(null);
   const hoverRef = useRef(null);
@@ -23,15 +24,15 @@ export default function GlobeView({ features, colorOf, selectedKey, onSelect, fe
       .atmosphereAltitude(0.18)
       .globeMaterial(new MeshPhongMaterial({ color: new Color('#0b1a2e'), emissive: new Color('#050b16'), shininess: 8 }))
       .polygonsTransitionDuration(0)
-      .polygonCapCurvatureResolution(8)
+      .polygonCapCurvatureResolution(5)
       .polygonSideColor(() => 'rgba(10, 15, 26, 0.6)')
-      .polygonStrokeColor(() => 'rgba(5, 7, 13, 0.85)')
+      .polygonStrokeColor((f) => (f.properties.LAND ? false : 'rgba(5, 7, 13, 0.85)'))
       .polygonAltitude((f) => altitudeFor(f))
       .polygonCapColor((f) => capColor(f))
       .polygonLabel((f) => props.current.labelOf(f))
       .onPolygonHover((f) => {
         hoverRef.current = f;
-        el.style.cursor = f ? 'pointer' : 'grab';
+        el.style.cursor = f && !f.properties.LAND ? 'pointer' : 'grab';
         // Hover only changes cap colors: re-raising polygons rebuilds geometry.
         globe.polygonCapColor(globe.polygonCapColor());
       })
@@ -40,13 +41,14 @@ export default function GlobeView({ features, colorOf, selectedKey, onSelect, fe
 
     function altitudeFor(f) {
       const { selectedKey: sel, featureKey: key } = props.current;
+      if (f.properties.LAND) return LAND_ALT;
       return sel && key(f) === sel ? SELECT_ALT : BASE_ALT;
     }
     function capColor(f) {
       const { selectedKey: sel, featureKey: key, colorOf: color } = props.current;
       if (sel && key(f) === sel) return '#f8fafc';
       const c = color(f);
-      return f === hoverRef.current ? lighten(c) : c;
+      return f === hoverRef.current && !f.properties.LAND ? lighten(c) : c;
     }
     function refresh() {
       globe.polygonAltitude(globe.polygonAltitude()).polygonCapColor(globe.polygonCapColor());
@@ -86,9 +88,11 @@ export default function GlobeView({ features, colorOf, selectedKey, onSelect, fe
     };
   }, []);
 
+  // Land first, under the territories. Feature objects are reused across
+  // years, so the globe keeps their meshes and only builds what changed.
   useEffect(() => {
-    globeRef.current?.globe.polygonsData(features);
-  }, [features]);
+    globeRef.current?.globe.polygonsData(land.length ? [...land, ...features] : features);
+  }, [features, land]);
 
   useEffect(() => {
     globeRef.current?.globe.polygonCapColor(globeRef.current.globe.polygonCapColor());

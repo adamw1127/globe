@@ -8,7 +8,7 @@ const ERA_COLORS = ['#f59e0b', '#a78bfa', '#38bdf8', '#34d399', '#f472b6'];
 // `allowed` stops: benchmark years before 1820, then yearly, minus the years
 // in which the chosen measure would leave the whole globe blank. The blocked
 // stretch at the start is shaded.
-export default function Timeline({ stops, allowed, year, onChange, eras, snapshotYear, blockedLabel }) {
+export default function Timeline({ stops, allowed, year, onChange, eras, mapLabel, blockedLabel }) {
   const min = stops[0];
   const max = stops[stops.length - 1];
   const [playing, setPlaying] = useState(false);
@@ -87,9 +87,7 @@ export default function Timeline({ stops, allowed, year, onChange, eras, snapsho
           ) : (
             era && <div className="truncate text-xs font-medium" style={{ color: era.color }}>{era.label}</div>
           )}
-          <div className="truncate text-[11px] text-slate-400">
-            Borders: {snapshotYear} map{snapshotYear !== year ? ' (latest before this year)' : ''}
-          </div>
+          <div className="truncate text-[11px] text-slate-400">{mapLabel}</div>
         </div>
         <div className="hidden shrink-0 text-[10.5px] text-slate-500 md:block">
           <kbd className="rounded bg-white/10 px-1">←</kbd> <kbd className="rounded bg-white/10 px-1">→</kbd> step · type a year

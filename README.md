@@ -23,7 +23,8 @@ Views are shareable through the URL hash, for example `#year=1914&color=exports_
 | `public/config/eras.json` | Era labels on the slider and the era-based coverage notes. |
 | `public/data/metrics/<id>.json` | One file per metric: `{ entityCode: { year: value } }`. |
 | `public/data/entities.json` | Maps map territories to data entities (see below). |
-| `public/data/borders/` | Simplified border snapshots plus `index.json`. |
+| `public/data/borders/` | Snapshots to 1885, `cshapes.json` (TopoJSON, every shape dated with the years it applies to) for 1886 to 2013, Natural Earth from 2014, and `land.json` drawn under every map. |
+| `public/data/stats/<id>.json` | Per metric: color breaks, countries ranked per year, and regional ranges per slider stop. |
 | `public/data/trade/<CODE>/<year>.json` | Top exports, imports and partners for one territory-year. |
 | `public/data/entity/<CODE>.json` | Every metric for one territory, for the panels and the chat. |
 | `public/data/timeline.json` | Slider stops, the first year each metric can color the map, and years it would leave the map blank. |
@@ -64,17 +65,20 @@ Formats: `usd`, `usd_compact`, `percent`, `compact`, `integer`, `decimal1`, `dec
 - A metric appears only when it has a value for that territory in that year or span. Sections start collapsed under a card of headline figures (`summaryMetrics` in `metrics.json`).
 - `badge` on a metric says when to use it over a look-alike (GDP vs. long-run GDP, for example); `sourceUrl` links each metric to its source.
 - The coverage note adapts to the era (`coverageNotes` in `eras.json`) and names the metrics when only a few exist.
-- Colors run from warm sand (small) through blues to dark green (large); measures that go negative use oranges below zero. Dark gray means no data.
+- **Colors** run from red (worse) to green (better), following each metric's `better` field (`up` or `down`); measures with no better direction run red for low to green for high. By default one scale per metric covers every year (breaks in `data/stats/<id>.json`), so a color means the same value in 1900 and 2000; the legend can switch to this year's spread. Gray means no figure; the darker land layer is land no state on that map covers.
+- **Estimates** fill missing values, always marked "est." and drawn faded on the map. They are computed in `scripts/lib/estimates.mjs` from real figures only: between two real values of the same territory (`estimate.interpolate`), a historical state's present-day successor for rates and per-person measures (`estimate.proxy`), or the typical range (20th to 80th percentile) of the region's countries that year, else of all countries (`estimate.peers`). Measures that did not exist yet (`notApplicable`) say so; anything else says why it is unknown, with an "Ask Claude for a rough estimate" button on claude.ai whose answer is labeled as Claude's guess and never stored.
+- **Percentiles** for every recorded value (`$pct` in the entity bundles, computed against present-day countries that year).
+- **Definitions**: underlined terms and metric names show a short definition with a Wikipedia link on hover or tap (`src/data/glossary.js`).
 - Notable events come only from the datasets (wars, regime changes, banking crises, inflation above 40%, GDP falls of 8% or more). The AI summary and the chat use Claude through the claude.ai Artifact `sample` capability, so they work only on the claude.ai copy of the page; the chat reads the globe's data through tools and says when it is using general knowledge.
 
 ## Borders and historical entities
 
-Borders come from [historical-basemaps](https://github.com/aourednik/historical-basemaps) by A. Ourednik (GPL-3.0). `npm run data:borders` simplifies each snapshot from 1600 on, fixes ring winding for Globe.gl and tags every territory with:
+`npm run data:borders` builds three border sources and tags every territory with `ENTITY` (an ISO3 code, a historical key, `PART:<ISO3>`, or null), `RULER` (the ruling power when the territory is subject to another, used for "Colonial status") and, on the old maps, `REGION` for territories that match no data entity:
 
-- `ENTITY`: the data entity code (an ISO3 code, a historical key, `PART:<ISO3>`, or null)
-- `RULER`: the ruling power when the territory is subject to another (used for "Colonial status")
-
-From 2011 the borders come from Natural Earth: the 2011 snapshot draws Crimea in Ukraine, the 2014 snapshot follows Natural Earth's de facto borders (Crimea under Russia), which is also how the World Bank's Ukraine figures are compiled from 2014. The app shows the latest snapshot at or before the selected year and tells the user which one. Using a later snapshot would show states before they existed (for example post-Soviet borders in 1980), so an earlier map is used even when a later one is closer.
+- **1600 to 1885:** snapshots from [historical-basemaps](https://github.com/aourednik/historical-basemaps) by A. Ourednik (GPL-3.0). A year uses the latest snapshot at or before it; a later one would show states before they existed.
+- **1886 to 2013:** [CShapes 2.0](https://icr.ethz.ch/data/cshapes/) (ETH Zurich, CC BY-NC-SA 4.0), which dates every border change of states and colonies, so each year gets its own map. Sovereignty comes from the Gleditsch-Ward list of independent states; colonial rulers from the [ICOW Colonial History](https://www.paulhensel.org/icowcol.html) dataset plus the handovers it does not record (German colonies after 1919, Spain's in 1898 and so on, listed in the script).
+- **2014 onward:** Natural Earth (public domain) de facto borders (Crimea under Russia), which is also how the World Bank compiles Ukraine's figures from 2014.
+- **Land layer:** Natural Earth land drawn under every map, so land that a map leaves unclaimed shows as land rather than as a hole in the globe.
 
 `public/data/entities.json` has two parts:
 

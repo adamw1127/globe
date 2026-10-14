@@ -45,7 +45,7 @@ for (const f of ['countries.json', 'entities.json', 'timeline.json']) await fs.c
 await fs.mkdir(path.join(out, 'data/trade'), { recursive: true });
 await fs.copyFile(path.join(dist, 'data/trade/index.json'), path.join(out, 'data/trade/index.json'));
 
-// Bundles: the per-territory trade and entity files, packed into ~6 MB
+// Bundles: the per-territory trade and entity files and per-metric stats, packed into ~6 MB
 // files of { "original/path.json": content }. data/packs/map.json maps each
 // original path to its bundle number, which src/data/fetchJSON.js reads.
 const packed = [];
@@ -53,7 +53,7 @@ const tradeDir = path.join(dist, 'data/trade');
 for (const code of (await fs.readdir(tradeDir)).filter((c) => c !== 'index.json').sort()) {
   for (const f of (await fs.readdir(path.join(tradeDir, code))).sort()) packed.push(`data/trade/${code}/${f}`);
 }
-for (const f of (await fs.readdir(path.join(dist, 'data/entity'))).sort()) packed.push(`data/entity/${f}`);
+for (const dir of ['entity', 'stats']) for (const f of (await fs.readdir(path.join(dist, 'data', dir))).sort()) packed.push(`data/${dir}/${f}`);
 
 const map = {};
 let pack = {};

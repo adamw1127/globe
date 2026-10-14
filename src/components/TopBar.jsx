@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { isNumeric, isMapDerived } from '../data/registry.js';
 import { formatValue } from '../data/format.js';
-import { MISSING_COLOR } from '../data/colorScale.js';
+import { MISSING_COLOR, faded } from '../data/colorScale.js';
 
 // Search, "color by" picker, legend and the top/bottom 10 for the map.
-export default function TopBar({ config, features, colorBy, onColorBy, choropleth, stop, onPick, compact }) {
+export default function TopBar({ config, features, colorBy, onColorBy, choropleth, stop, onPick, compact, fixedScale, onFixedScale }) {
   const metric = config.metricsById[colorBy];
   const [legendOpen, setLegendOpen] = useState(!compact);
   const [rankOpen, setRankOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function TopBar({ config, features, colorBy, onColorBy, choroplet
               Top / bottom 10
             </button>
           </div>
-          {legendOpen && <Legend scale={choropleth.scale} count={choropleth.count} carried={choropleth.carried} stop={stop} />}
+          {legendOpen && <Legend scale={choropleth.scale} count={choropleth.count} carried={choropleth.carried} estimated={choropleth.estimated} stop={stop} fixedScale={fixedScale} onFixedScale={onFixedScale} />}
           {rankOpen && choropleth.count > 0 && (
             <Rankings ranked={choropleth.ranked} metric={metric} onPick={(code) => { onPick({ code }); if (compact) setRankOpen(false); }} />
           )}
@@ -65,8 +65,9 @@ export default function TopBar({ config, features, colorBy, onColorBy, choroplet
   );
 }
 
-function Legend({ scale, count, carried, stop }) {
+function Legend({ scale, count, carried, estimated, stop, fixedScale, onFixedScale }) {
   if (!scale) return <div className="mt-1.5 text-[11px] text-slate-500 italic">No territory has data for {stop}.</div>;
+  const ends = scale.better === 'up' ? ['Low (worse)', 'High (better)'] : scale.better === 'down' ? ['Low (better)', 'High (worse)'] : ['Low', 'High'];
   return (
     <div className="mt-1.5">
       <div className="flex gap-0.5">
@@ -77,13 +78,23 @@ function Legend({ scale, count, carried, stop }) {
           </div>
         ))}
       </div>
+      <div className="flex justify-between text-[10px] text-slate-500">
+        <span>{ends[0]}</span>
+        <span>{ends[1]}</span>
+      </div>
       <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10.5px] text-slate-500">
-        <span>Low (warm) to high (dark)</span>
         <span className="flex items-center gap-1">
-          <span className="h-2 w-3 rounded-sm ring-1 ring-white/10" style={{ background: MISSING_COLOR }} /> No data
+          <span className="h-2 w-3 rounded-sm ring-1 ring-white/10" style={{ background: MISSING_COLOR }} /> No figure
         </span>
-        <span className="tabular-nums">{count} with data</span>
+        <span className="flex items-center gap-1">
+          <span className="h-2 w-3 rounded-sm ring-1 ring-white/10" style={{ background: faded(scale.legend[Math.floor(scale.legend.length / 2)].color) }} /> Faded: estimate
+        </span>
+        <span className="tabular-nums">{count} recorded{estimated ? `, ${estimated} estimated` : ''}</span>
         {carried > 0 && <span className="text-amber-200/80">{carried} use their latest earlier value</span>}
+        <label className="flex items-center gap-1 text-slate-400">
+          <input type="checkbox" checked={fixedScale} onChange={(e) => onFixedScale(e.target.checked)} className="accent-emerald-400" />
+          Same colors in every year
+        </label>
       </div>
     </div>
   );
