@@ -27,8 +27,11 @@ let css = '';
 for (const href of cssHrefs) css += await fs.readFile(path.join(dist, href), 'utf8');
 await fs.writeFile(path.join(out, 'index.html'),
   `${title}\n<meta name="theme-color" content="#05070d">\n<style>${css}</style>\n<div id="root"></div>\n<script type="module" src="${scriptSrc}"></script>\n`);
+// The entry script and the chunks it loads on demand (charts).
 await fs.mkdir(path.join(out, path.dirname(scriptSrc)), { recursive: true });
-await fs.copyFile(path.join(dist, scriptSrc), path.join(out, scriptSrc));
+for (const f of await fs.readdir(path.join(dist, path.dirname(scriptSrc)))) {
+  if (f.endsWith('.js')) await fs.copyFile(path.join(dist, path.dirname(scriptSrc), f), path.join(out, path.dirname(scriptSrc), f));
+}
 
 // Data that is copied as is.
 const copyDir = async (from, to) => {
